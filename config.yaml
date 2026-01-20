@@ -1,0 +1,139 @@
+# Configuration file for Customer Segmentation Project
+# Author: Thomas Mebarki
+
+# Data paths
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  output_dir: "outputs"
+
+  # Raw data files
+  raw_files:
+    orders: "olist_orders_dataset.csv"
+    order_items: "olist_order_items_dataset.csv"
+    order_reviews: "olist_order_reviews_dataset.csv"
+    customers: "olist_customers_dataset.csv"
+    order_payments: "olist_order_payments_dataset.csv"
+    products: "olist_products_dataset.csv"
+    sellers: "olist_sellers_dataset.csv"
+    geolocation: "olist_geolocation_dataset.csv"
+    product_category: "product_category_name_translation.csv"
+
+  # Processed data files
+  processed_files:
+    transactions: "transactions.csv"
+    transactions_with_reviews: "transactions_with_reviews.csv"
+    rfm: "data_RFM.csv"
+    rfm_with_reviews: "data_2.csv"
+
+# RFM Feature Engineering
+rfm:
+  features:
+    - "Recency"
+    - "Frequency"
+    - "Monetary"
+
+  # Column mappings
+  customer_id_col: "customer_unique_id"
+  date_col: "order_purchase_timestamp"
+  monetary_col: "payment_value"
+
+  # RFM scoring
+  n_quantiles: 5
+
+# Clustering Model Configuration
+clustering:
+  # Algorithm selection: 'kmeans', 'dbscan', 'agglomerative'
+  algorithm: "kmeans"
+
+  # K-Means parameters
+  kmeans:
+    n_clusters: 4
+    random_state: 42
+    n_init: 10
+    max_iter: 300
+
+  # DBSCAN parameters
+  dbscan:
+    eps: 0.5
+    min_samples: 5
+    metric: "euclidean"
+
+  # Agglomerative Clustering parameters
+  agglomerative:
+    n_clusters: 4
+    linkage: "ward"
+
+  # Feature columns for clustering
+  feature_columns:
+    - "Recency"
+    - "Frequency"
+    - "Monetary"
+
+  # Elbow method configuration
+  elbow:
+    k_min: 2
+    k_max: 15
+
+# Model Persistence
+model:
+  save_dir: "outputs/models"
+  model_filename: "customer_segmentation_model.pkl"
+  scaler_filename: "feature_scaler.pkl"
+
+# Evaluation Metrics
+evaluation:
+  metrics:
+    - "silhouette_score"
+    - "calinski_harabasz_score"
+    - "davies_bouldin_score"
+
+  # Temporal stability analysis
+  temporal_stability:
+    enabled: true
+    base_week: 52
+    n_weeks: 52
+    ari_threshold: 0.8
+
+# Visualization Settings
+visualization:
+  save_dir: "outputs/figures"
+  dpi: 300
+  format: "png"
+
+  # Plot configurations
+  plots:
+    rfm_distributions: true
+    clusters_2d: true
+    clusters_3d: true
+    elbow_curve: true
+    silhouette_analysis: true
+    cluster_profiles: true
+    temporal_stability: true
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "outputs/segmentation.log"
+
+# Cluster Descriptions (for interpretation)
+cluster_descriptions:
+  0: "Recent Browsers - Recent single-purchase customers"
+  1: "Loyal Repeat Buyers - Best customers with multiple purchases"
+  2: "Dormant/Inactive - Old customers at risk of churn"
+  3: "VIP/High-Value - Highest spending customers"
+
+# Dashboard Configuration
+dashboard:
+  title: "Customer Segmentation Dashboard"
+  port: 8501
+  theme: "light"
+
+  # Features to display
+  features:
+    cluster_overview: true
+    rfm_analysis: true
+    customer_search: true
+    segment_comparison: true
+    download_results: true
