@@ -9,300 +9,283 @@ Transformer le Projet_4 (segmentation clients Olist) en projet portfolio
 professionnel pour GitHub afin de trouver un emploi.
 
 ================================================================================
+                         INFORMATIONS IMPORTANTES
+================================================================================
+
+REPOSITORY GITHUB
+-----------------
+URL : https://github.com/ThomasMeb/Segmenter_Clients_Ecom
+Visibilité : PUBLIC
+Branche : main
+
+DASHBOARD STREAMLIT CLOUD
+-------------------------
+URL : https://segmenter-clients-ecom.streamlit.app/
+État : DÉPLOYÉ - ERREURS À CORRIGER (voir section TÂCHE EN COURS)
+
+CHEMIN LOCAL
+------------
+/home/thomas/Code/Projet_4
+
+================================================================================
                               CE QUI A ÉTÉ FAIT
 ================================================================================
 
-PHASE 1 : AUDIT ET DOCUMENTATION ✅ TERMINÉE
----------------------------------------------
-
-1.1 Analyse des notebooks existants ✅
-    - notebook_exploration : EDA des données Olist
-    - notebook_essais : Tests de clustering (KMeans, DBSCAN, Agglomerative)
-    - notebook_simulation : Simulation de maintenance du modèle (ARI score)
-
-    Problèmes identifiés :
-    - ~50 cellules vides
-    - Code dupliqué
-    - Erreurs non corrigées (IndexError, ValueError)
-    - Pas de fonctions/classes
-    - Variables mal nommées
-
-1.2 Identification des dépendances ✅
-    - pandas, numpy (core)
-    - matplotlib, seaborn, plotly (visualisation)
-    - scikit-learn (ML)
-    - yellowbrick, scipy
-
-1.3 Documentation logique métier ✅
-    - Modèle RFM : Recency, Frequency, Monetary
-    - Meilleur modèle : KMeans k=4, Silhouette Score = 0.677
-    - 4 segments : Récents (54%), Fidèles (3%), Dormants (40%), VIP (3%)
-
-1.4 Documents créés :
-    - docs/SPECIFICATIONS_TECHNIQUES.md (370+ lignes)
-    - docs/ARCHITECTURE.md (document complet)
+PHASE 1 : AUDIT ET DOCUMENTATION ✅ TERMINÉE (100%)
+----------------------------------------------------
+- Analyse des 3 notebooks originaux (exploration, essais, simulation)
+- Identification des problèmes : cellules vides, code dupliqué, erreurs
+- Documentation de la logique métier RFM
+- Création de docs/SPECIFICATIONS_TECHNIQUES.md et docs/ARCHITECTURE.md
 
 
 PHASE 2 : ARCHITECTURE ✅ TERMINÉE (100%)
--------------------------------------------------
+------------------------------------------
+Structure complète créée :
 
-2.1 Choix architecturaux validés ✅
-    - Structure : Standard (Python package)
-    - Nom projet : olist-customer-segmentation
-    - Feature : Dashboard Streamlit
-    - Données : Git LFS
+Projet_4/
+├── .github/workflows/ci.yml     # CI/CD GitHub Actions
+├── .gitattributes               # Config Git LFS
+├── .gitignore
+├── .streamlit/config.toml       # Config Streamlit
+├── LICENSE                      # MIT
+├── README.md                    # README professionnel
+├── pyproject.toml               # Config projet moderne
+├── requirements.txt             # Dépendances pip
+├── RESUME_PROJET.txt            # CE FICHIER
+│
+├── src/                         # Code source modulaire
+│   ├── __init__.py
+│   ├── config.py                # Configuration centralisée
+│   ├── data/
+│   │   ├── __init__.py
+│   │   ├── loader.py            # Chargement données
+│   │   └── preprocessor.py      # Nettoyage données
+│   ├── features/
+│   │   ├── __init__.py
+│   │   └── rfm.py               # Calcul RFM (classe RFMCalculator)
+│   ├── models/
+│   │   ├── __init__.py
+│   │   ├── clustering.py        # CustomerSegmenter (KMeans)
+│   │   └── evaluation.py        # Métriques de clustering
+│   └── visualization/
+│       ├── __init__.py
+│       └── plots.py             # Fonctions de visualisation
+│
+├── app/                         # Dashboard Streamlit
+│   ├── __init__.py
+│   ├── app.py                   # Point d'entrée principal
+│   ├── utils.py                 # Utilitaires + génération données démo
+│   └── pages/
+│       ├── 1_Overview.py        # Vue d'ensemble (pie chart, radar)
+│       ├── 2_Segments.py        # Détail segments + recommandations
+│       ├── 3_Explorer.py        # Exploration interactive (filtres, 3D)
+│       └── 4_About.py           # Documentation
+│
+├── tests/                       # Tests unitaires (54 tests)
+│   ├── __init__.py
+│   ├── conftest.py              # Fixtures pytest
+│   ├── test_loader.py           # Tests chargement données
+│   ├── test_rfm.py              # Tests calcul RFM
+│   ├── test_clustering.py       # Tests clustering
+│   └── test_visualization.py    # Tests visualisation
+│
+├── notebooks/                   # 4 notebooks propres
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_modeling.ipynb
+│   └── 04_results_analysis.ipynb
+│
+├── scripts/
+│   └── prepare_dashboard_data.py  # Script préparation données
+│
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── DEPLOYMENT.md            # Guide déploiement Streamlit Cloud
+│   ├── SPECIFICATIONS_TECHNIQUES.md
+│   └── presentation_originale.pptx
+│
+├── data/
+│   ├── raw/                     # data.csv, data_2.csv
+│   └── processed/               # data_RFM.csv
+│
+└── models/                      # Modèles sauvegardés (à générer)
 
-2.2 Structure de dossiers créée ✅
-    Arborescence complète :
 
-    Projet_4/
-    ├── .github/workflows/ci.yml     ✅ CI/CD GitHub Actions
-    ├── .gitattributes               ✅ Config Git LFS
-    ├── .gitignore                   ✅
-    ├── .streamlit/config.toml       ✅ Config Streamlit
-    ├── LICENSE                      ✅ MIT
-    ├── pyproject.toml               ✅ Config projet moderne
-    ├── requirements.txt             ✅ Dépendances pip
-    │
-    ├── src/                         ✅ Code source modulaire
-    │   ├── __init__.py              ✅
-    │   ├── config.py                ✅ Configuration centralisée
-    │   ├── data/
-    │   │   ├── __init__.py          ✅
-    │   │   ├── loader.py            ✅ Chargement données
-    │   │   └── preprocessor.py      ✅ Nettoyage données
-    │   ├── features/
-    │   │   ├── __init__.py          ✅
-    │   │   └── rfm.py               ✅ Calcul RFM (classe + fonction)
-    │   ├── models/
-    │   │   ├── __init__.py          ✅
-    │   │   ├── clustering.py        ✅ CustomerSegmenter (KMeans)
-    │   │   └── evaluation.py        ✅ Métriques de clustering
-    │   └── visualization/
-    │       ├── __init__.py          ✅
-    │       └── plots.py             ✅ Fonctions de visualisation
-    │
-    ├── app/                         ✅ Dashboard Streamlit
-    │   ├── __init__.py              ✅
-    │   ├── app.py                   ✅ Point d'entrée
-    │   └── pages/
-    │       ├── 1_Overview.py        ✅ Vue d'ensemble
-    │       ├── 2_Segments.py        ✅ Détail segments
-    │       ├── 3_Explorer.py        ✅ Exploration interactive
-    │       └── 4_About.py           ✅ À propos
-    │
-    ├── tests/                       ✅ Structure tests
-    │   ├── __init__.py              ✅
-    │   └── conftest.py              ✅ Fixtures pytest
-    │
-    ├── docs/                        ✅ Documentation
-    │   ├── SPECIFICATIONS_TECHNIQUES.md  ✅
-    │   └── ARCHITECTURE.md              ✅
-    │
-    ├── notebooks/                   📁 Dossier créé (vide)
-    ├── models/                      📁 Dossier créé (vide)
-    └── data/
-        ├── raw/                     📁 Dossier créé (à migrer)
-        └── processed/               📁 Dossier créé (à créer)
-
-
-2.3 Configuration projet ✅
-    - pyproject.toml : Dépendances, outils (black, ruff, pytest)
-    - .gitattributes : Git LFS configuré
-    - .github/workflows/ci.yml : CI/CD prêt
-
-2.4 Git LFS ⏳ À faire
-    - Commandes à exécuter (voir section suivante)
-
-
-================================================================================
-                           CE QU'IL RESTE À FAIRE
-================================================================================
-
-PHASE 2 : FINALISATION ARCHITECTURE ✅ TERMINÉE
+PHASE 3 : RESTRUCTURATION CODE ✅ TERMINÉE (100%)
 --------------------------------------------------
-✅ Git LFS configuré (.gitattributes déjà en place)
-
-✅ Données migrées (22 janvier 2026)
-    - data.csv, data_2.csv → data/raw/
-    - data_RFM.csv → data/processed/
-
-□ Renommer le dossier (optionnel)
-    $ mv Projet_4 olist-customer-segmentation
+- 4 notebooks propres créés utilisant les modules src/
+- Anciens notebooks supprimés (Mebarki_Thomas_notebook_*.ipynb)
+- Fichier zip et dossier dupliqué supprimés
+- Présentation PowerPoint conservée dans docs/
 
 
-PHASE 3 : RESTRUCTURATION CODE ✅ TERMINÉE
--------------------------------------------
-✅ 4 notebooks propres créés (22 janvier 2026) :
-    - notebooks/01_data_exploration.ipynb
-    - notebooks/02_feature_engineering.ipynb
-    - notebooks/03_modeling.ipynb
-    - notebooks/04_results_analysis.ipynb
+PHASE 4 : TESTS ✅ TERMINÉE (75%)
+----------------------------------
+Tests unitaires créés (54 tests total) :
+- tests/test_loader.py : 9 tests
+- tests/test_rfm.py : 15 tests
+- tests/test_clustering.py : 18 tests
+- tests/test_visualization.py : 12 tests
 
-✅ Modules src/ utilisés dans les notebooks
-✅ Anciens notebooks supprimés :
-    - Mebarki_Thomas_notebook_essais_022023.ipynb
-    - Mebarki_Thomas_notebook_exploration_022023.ipynb
-    - Mebarki_Thomas_notebook_simulation_032023.ipynb
-    - Projet_4_Thomas_Mebarki.zip
-    - Dossier Projet_4_Thomas_Mebarki/
-
-✅ Présentation conservée : docs/presentation_originale.pptx
+À faire :
+- Exécuter les tests avec pytest
+- Vérifier la couverture de code
 
 
-PHASE 4 : TESTS ET QUALITÉ ✅ EN COURS (75%)
----------------------------------------------
-✅ Tests unitaires créés (22 janvier 2026) :
-    - tests/test_loader.py (5 classes, 9 tests)
-    - tests/test_rfm.py (2 classes, 15 tests)
-    - tests/test_clustering.py (2 classes, 18 tests)
-    - tests/test_visualization.py (6 classes, 12 tests)
+PHASE 5 : DOCUMENTATION ✅ TERMINÉE (90%)
+------------------------------------------
+- README.md professionnel avec badges, installation, usage
+- Guide de déploiement docs/DEPLOYMENT.md
+- Documentation technique complète
 
-□ Exécuter les tests (nécessite environnement virtuel)
-□ Atteindre coverage > 80%
-□ Configurer pre-commit hooks
+À faire :
+- Ajouter screenshots du dashboard
+- Mettre à jour les liens personnels (GitHub, LinkedIn)
 
 
-PHASE 5 : DOCUMENTATION ✅ TERMINÉE
-------------------------------------
-✅ README.md professionnel créé (22 janvier 2026) :
-    - Badges (Python, MIT License, Black, CI)
-    - Table des matières
-    - Overview et Business Context
-    - Key Results avec tableau des segments
-    - Instructions d'installation complètes
-    - Guide d'utilisation (Quick Start, Dashboard, Notebooks)
-    - Structure du projet détaillée
-    - Méthodologie (RFM, KMeans, Maintenance)
-    - Tech Stack
-    - Section Contributing
+PHASE 6 : DASHBOARD STREAMLIT ✅ TERMINÉE (100%)
+-------------------------------------------------
+Dashboard complet avec 4 pages :
+- Page d'accueil : KPIs, aperçu données
+- Overview : Pie chart segments, Radar chart profils
+- Segments : Détail par segment, recommandations marketing
+- Explorer : Filtres interactifs, Scatter 2D/3D, export CSV
+- About : Documentation, méthodologie, auteur
 
-□ Ajouter screenshots du dashboard (après lancement)
-□ Personnaliser les liens GitHub/LinkedIn
+Fonctionnalités :
+- Mode démonstration (génère données si absentes)
+- Configuration Streamlit personnalisée
+- Responsive design
 
 
-PHASE 6 : DASHBOARD STREAMLIT ✅ PRÊT (90%)
--------------------------------------------
-✅ Dashboard complet avec 4 pages :
-    - app/app.py : Page d'accueil avec KPIs
-    - app/pages/1_Overview.py : Vue d'ensemble (pie chart, radar)
-    - app/pages/2_Segments.py : Détail segments + recommandations
-    - app/pages/3_Explorer.py : Exploration interactive (filtres, 3D)
-    - app/pages/4_About.py : Documentation
-
-✅ Configuration Streamlit (.streamlit/config.toml)
-✅ Script de préparation des données (scripts/prepare_dashboard_data.py)
-
-□ Exécuter le script de préparation :
-    $ python scripts/prepare_dashboard_data.py
-
-□ Lancer le dashboard :
-    $ streamlit run app/app.py
-
-□ Créer les screenshots pour le README
-
-
-PHASE 7 : DÉPLOIEMENT ✅ PRÊT
-------------------------------
-✅ Mode démonstration ajouté (app/utils.py)
-    - Génère des données de démo si les vraies ne sont pas disponibles
-    - Permet le déploiement sans Git LFS
-
-✅ Guide de déploiement créé (docs/DEPLOYMENT.md)
-
-✅ Dashboard mis à jour pour Streamlit Cloud
-    - Toutes les pages utilisent le nouveau système de chargement
-    - Affichage "Mode Démonstration" si données de démo
-
-□ Étapes pour déployer :
-    1. Push le projet sur GitHub
-    2. Aller sur share.streamlit.io
-    3. New app → sélectionner repo → app/app.py
-    4. Deploy!
-
-□ Ajouter le lien du dashboard dans le README
-
+PHASE 7 : DÉPLOIEMENT ✅ EN COURS (95%)
+----------------------------------------
+✅ Projet pushé sur GitHub
+✅ Repository rendu PUBLIC
+✅ Déploiement sur Streamlit Cloud lancé
+⚠️ ERREURS À CORRIGER sur le dashboard déployé
 
 ================================================================================
-                          COMMANDES POUR REPRENDRE
+                           TÂCHE EN COURS
 ================================================================================
 
-# 1. Aller dans le projet
+PROBLÈME ACTUEL : Erreurs sur Streamlit Cloud
+----------------------------------------------
+Le dashboard est déployé sur https://segmenter-clients-ecom.streamlit.app/
+mais il y a des erreurs à corriger.
+
+ACTIONS REQUISES :
+1. Accéder au dashboard via Chrome DevTools MCP
+2. Relever les erreurs dans la console Streamlit
+3. Corriger les erreurs dans le code
+4. Commiter et pusher les corrections
+5. Vérifier que le dashboard fonctionne
+
+COMMANDE MCP POUR ACCÉDER :
+mcp__chrome-devtools__navigate_page avec url: https://segmenter-clients-ecom.streamlit.app/
+
+COMMANDE POUR VOIR LES ERREURS :
+mcp__chrome-devtools__list_console_messages
+
+================================================================================
+                          COMMANDES UTILES
+================================================================================
+
+# Aller dans le projet
 cd /home/thomas/Code/Projet_4
 
-# 2. Initialiser Git LFS
-git lfs install
-git lfs track "*.csv"
-git lfs track "*.parquet"
-git lfs track "*.pkl"
+# Voir l'état git
+git status
 
-# 3. Migrer les données
-mkdir -p data/raw data/processed
-mv data.csv data_2.csv data_RFM.csv data/raw/
+# Commiter des changements
+git add <fichiers>
+git commit -m "message"
+git push origin main
 
-# 4. Créer un environnement virtuel
+# Créer environnement virtuel et installer
 python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# ou .venv\Scripts\activate  # Windows
-
-# 5. Installer les dépendances
+source .venv/bin/activate
 pip install -e ".[dev]"
 
-# 6. Lancer les tests
+# Lancer les tests
 pytest tests/ -v
 
-# 7. Lancer le dashboard (après avoir généré les données)
+# Lancer le dashboard localement
 streamlit run app/app.py
 
+# Préparer les données pour le dashboard
+python scripts/prepare_dashboard_data.py
 
 ================================================================================
-                              AGENTS BMAD À UTILISER
+                              FICHIERS CLÉS
 ================================================================================
-
-Pour continuer le projet, utiliser les agents BMad dans cet ordre :
-
-1. *agent dev      → Refactoring du code, création des notebooks
-2. *agent qa       → Écriture des tests, vérification qualité
-3. *agent pm       → Rédaction du README professionnel
-4. *agent ux-expert → Amélioration des visualisations
-
-
-================================================================================
-                                FICHIERS CLÉS
-================================================================================
-
-Documentation :
-- docs/SPECIFICATIONS_TECHNIQUES.md  → Spécifications complètes
-- docs/ARCHITECTURE.md               → Architecture détaillée
 
 Configuration :
-- pyproject.toml                     → Config projet
-- requirements.txt                   → Dépendances
-- .github/workflows/ci.yml           → CI/CD
+- pyproject.toml                → Config projet Python
+- requirements.txt              → Dépendances (pour Streamlit Cloud)
+- .streamlit/config.toml        → Config Streamlit
 
-Code source :
-- src/config.py                      → Configuration centralisée
-- src/features/rfm.py                → Calcul RFM
-- src/models/clustering.py           → Modèle de segmentation
+Code source principal :
+- src/config.py                 → Constantes et chemins
+- src/features/rfm.py           → Classe RFMCalculator
+- src/models/clustering.py      → Classe CustomerSegmenter
+- app/utils.py                  → Génération données démo
 
 Dashboard :
-- app/app.py                         → Point d'entrée Streamlit
-- app/pages/*.py                     → Pages du dashboard
+- app/app.py                    → Point d'entrée Streamlit
+- app/pages/1_Overview.py       → Page vue d'ensemble
+- app/pages/2_Segments.py       → Page détail segments
+- app/pages/3_Explorer.py       → Page exploration
+- app/pages/4_About.py          → Page à propos
 
+Documentation :
+- README.md                     → Documentation principale
+- docs/DEPLOYMENT.md            → Guide déploiement
+- RESUME_PROJET.txt             → CE FICHIER
+
+================================================================================
+                              SEGMENTS CLIENTS
+================================================================================
+
+Le modèle identifie 4 segments basés sur RFM (Recency, Frequency, Monetary) :
+
+| ID | Nom              | % Clients | Caractéristiques           |
+|----|------------------|-----------|----------------------------|
+| 0  | Clients Récents  | 54%       | Achat récent, 1 commande   |
+| 1  | Clients Fidèles  | 3%        | Achats réguliers           |
+| 2  | Clients Dormants | 40%       | Inactifs depuis longtemps  |
+| 3  | Clients VIP      | 3%        | Haute valeur               |
+
+Meilleur modèle : KMeans k=4, Silhouette Score = 0.677
 
 ================================================================================
                                  PROGRESSION
 ================================================================================
 
-Phase 1 : Audit                 ████████████████████ 100%
+Phase 1 : Audit                 ████████████████████ 100% ✅
 Phase 2 : Architecture          ████████████████████ 100% ✅
-Phase 3 : Restructuration       ████████████████████ 100% ✅ (nettoyé)
-Phase 4 : Tests                 ███████████████░░░░░  75% (tests écrits)
-Phase 5 : Documentation         ██████████████████░░  90% (README créé)
+Phase 3 : Restructuration       ████████████████████ 100% ✅
+Phase 4 : Tests                 ███████████████░░░░░  75%
+Phase 5 : Documentation         ██████████████████░░  90%
 Phase 6 : Dashboard             ████████████████████ 100% ✅
-Phase 7 : Déploiement           ██████████████████░░  90% (prêt à déployer)
+Phase 7 : Déploiement           ███████████████████░  95% ⚠️ ERREURS À CORRIGER
 
 PROGRESSION GLOBALE : ~95%
+
+================================================================================
+                           PROCHAINES ÉTAPES
+================================================================================
+
+1. [URGENT] Corriger les erreurs sur Streamlit Cloud
+   - Utiliser Chrome DevTools MCP pour diagnostiquer
+   - Corriger le code
+   - Push et vérifier
+
+2. [OPTIONNEL] Finaliser
+   - Exécuter les tests localement
+   - Ajouter screenshots au README
+   - Mettre à jour liens personnels
 
 ================================================================================
                                     FIN
