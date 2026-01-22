@@ -9,9 +9,11 @@ import pandas as pd
 from pathlib import Path
 import sys
 
-# Ajouter le répertoire racine au path pour les imports
+# Ajouter les répertoires au path pour les imports
 ROOT_DIR = Path(__file__).parent.parent
+APP_DIR = Path(__file__).parent
 sys.path.insert(0, str(ROOT_DIR))
+sys.path.insert(0, str(APP_DIR))
 
 # Configuration de la page
 st.set_page_config(
@@ -29,7 +31,7 @@ MODELS_DIR = ROOT_DIR / "models"
 @st.cache_data
 def load_data():
     """Charge les données RFM avec mise en cache."""
-    from app.utils import load_rfm_data
+    from utils import load_rfm_data
     return load_rfm_data()
 
 
