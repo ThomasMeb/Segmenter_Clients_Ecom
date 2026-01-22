@@ -7,6 +7,11 @@ Lance l'application avec : streamlit run app/app.py
 import streamlit as st
 import pandas as pd
 from pathlib import Path
+import sys
+
+# Ajouter le répertoire racine au path pour les imports
+ROOT_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT_DIR))
 
 # Configuration de la page
 st.set_page_config(
@@ -17,7 +22,6 @@ st.set_page_config(
 )
 
 # Paths
-ROOT_DIR = Path(__file__).parent.parent
 DATA_DIR = ROOT_DIR / "data" / "processed"
 MODELS_DIR = ROOT_DIR / "models"
 
