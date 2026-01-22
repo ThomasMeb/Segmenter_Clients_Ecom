@@ -21,7 +21,7 @@ Branche : main
 DASHBOARD STREAMLIT CLOUD
 -------------------------
 URL : https://segmenter-clients-ecom.streamlit.app/
-État : DÉPLOYÉ - ERREURS À CORRIGER (voir section TÂCHE EN COURS)
+État : DÉPLOYÉ ET FONCTIONNEL (Mode Démonstration)
 
 CHEMIN LOCAL
 ------------
@@ -159,34 +159,84 @@ Fonctionnalités :
 - Responsive design
 
 
-PHASE 7 : DÉPLOIEMENT ✅ EN COURS (95%)
-----------------------------------------
+PHASE 7 : DÉPLOIEMENT ✅ TERMINÉE (100%)
+-----------------------------------------
 ✅ Projet pushé sur GitHub
 ✅ Repository rendu PUBLIC
-✅ Déploiement sur Streamlit Cloud lancé
-⚠️ ERREURS À CORRIGER sur le dashboard déployé
+✅ Déploiement sur Streamlit Cloud réussi
+✅ ERREURS CORRIGÉES - Dashboard fonctionnel
+
+CORRECTIFS APPLIQUÉS (22 janvier 2026) :
+- Problème : ModuleNotFoundError sur Streamlit Cloud
+- Cause : Import "from app.utils" ne fonctionnait pas
+- Solution : Ajout de APP_DIR à sys.path + import "from utils"
+- Commits : 103db67 et a275990
 
 ================================================================================
-                           TÂCHE EN COURS
+                           ÉTAT ACTUEL DU PROJET
 ================================================================================
 
-PROBLÈME ACTUEL : Erreurs sur Streamlit Cloud
-----------------------------------------------
-Le dashboard est déployé sur https://segmenter-clients-ecom.streamlit.app/
-mais il y a des erreurs à corriger.
+LE DASHBOARD FONCTIONNE !
+-------------------------
+URL : https://segmenter-clients-ecom.streamlit.app/
 
-ACTIONS REQUISES :
-1. Accéder au dashboard via Chrome DevTools MCP
-2. Relever les erreurs dans la console Streamlit
-3. Corriger les erreurs dans le code
-4. Commiter et pusher les corrections
-5. Vérifier que le dashboard fonctionne
+Ce qui s'affiche :
+- Page d'accueil avec KPIs (5,000 clients, 4 segments)
+- Message "Mode Démonstration" (données générées car pas de vraies données)
+- Navigation vers Overview, Segments, Explorer, About
+- Tableau de données avec colonnes : customer_unique_id, recency, frequency, monetary, segment
 
-COMMANDE MCP POUR ACCÉDER :
-mcp__chrome-devtools__navigate_page avec url: https://segmenter-clients-ecom.streamlit.app/
+================================================================================
+                              SEGMENTS CLIENTS
+================================================================================
 
-COMMANDE POUR VOIR LES ERREURS :
-mcp__chrome-devtools__list_console_messages
+Le modèle identifie 4 segments basés sur RFM (Recency, Frequency, Monetary) :
+
+| ID | Nom              | % Clients | Caractéristiques           |
+|----|------------------|-----------|----------------------------|
+| 0  | Clients Récents  | 54%       | Achat récent, 1 commande   |
+| 1  | Clients Fidèles  | 3%        | Achats réguliers           |
+| 2  | Clients Dormants | 40%       | Inactifs depuis longtemps  |
+| 3  | Clients VIP      | 3%        | Haute valeur               |
+
+Meilleur modèle : KMeans k=4, Silhouette Score = 0.677
+
+================================================================================
+                                 PROGRESSION
+================================================================================
+
+Phase 1 : Audit                 ████████████████████ 100% ✅
+Phase 2 : Architecture          ████████████████████ 100% ✅
+Phase 3 : Restructuration       ████████████████████ 100% ✅
+Phase 4 : Tests                 ███████████████░░░░░  75%
+Phase 5 : Documentation         ██████████████████░░  90%
+Phase 6 : Dashboard             ████████████████████ 100% ✅
+Phase 7 : Déploiement           ████████████████████ 100% ✅
+
+PROGRESSION GLOBALE : ~95%
+
+================================================================================
+                           TÂCHES RESTANTES
+================================================================================
+
+1. [OPTIONNEL] Vérifier les autres pages du dashboard
+   - Cliquer sur Overview, Segments, Explorer, About
+   - S'assurer qu'elles fonctionnent sans erreur
+
+2. [OPTIONNEL] Exécuter les tests localement
+   - cd /home/thomas/Code/Projet_4
+   - source .venv/bin/activate (ou créer l'environnement)
+   - pip install -e ".[dev]"
+   - pytest tests/ -v
+
+3. [OPTIONNEL] Finaliser la documentation
+   - Ajouter screenshots du dashboard au README
+   - Mettre à jour liens GitHub/LinkedIn personnels
+
+4. [OPTIONNEL] Utiliser les vraies données
+   - Exécuter : python scripts/prepare_dashboard_data.py
+   - Commiter le fichier data/processed/customers_rfm.parquet
+   - Push vers GitHub pour avoir les vraies données sur Streamlit Cloud
 
 ================================================================================
                           COMMANDES UTILES
@@ -217,6 +267,9 @@ streamlit run app/app.py
 # Préparer les données pour le dashboard
 python scripts/prepare_dashboard_data.py
 
+# Accéder au dashboard déployé via Chrome DevTools MCP
+mcp__chrome-devtools__navigate_page avec url: https://segmenter-clients-ecom.streamlit.app/
+
 ================================================================================
                               FICHIERS CLÉS
 ================================================================================
@@ -243,49 +296,6 @@ Documentation :
 - README.md                     → Documentation principale
 - docs/DEPLOYMENT.md            → Guide déploiement
 - RESUME_PROJET.txt             → CE FICHIER
-
-================================================================================
-                              SEGMENTS CLIENTS
-================================================================================
-
-Le modèle identifie 4 segments basés sur RFM (Recency, Frequency, Monetary) :
-
-| ID | Nom              | % Clients | Caractéristiques           |
-|----|------------------|-----------|----------------------------|
-| 0  | Clients Récents  | 54%       | Achat récent, 1 commande   |
-| 1  | Clients Fidèles  | 3%        | Achats réguliers           |
-| 2  | Clients Dormants | 40%       | Inactifs depuis longtemps  |
-| 3  | Clients VIP      | 3%        | Haute valeur               |
-
-Meilleur modèle : KMeans k=4, Silhouette Score = 0.677
-
-================================================================================
-                                 PROGRESSION
-================================================================================
-
-Phase 1 : Audit                 ████████████████████ 100% ✅
-Phase 2 : Architecture          ████████████████████ 100% ✅
-Phase 3 : Restructuration       ████████████████████ 100% ✅
-Phase 4 : Tests                 ███████████████░░░░░  75%
-Phase 5 : Documentation         ██████████████████░░  90%
-Phase 6 : Dashboard             ████████████████████ 100% ✅
-Phase 7 : Déploiement           ███████████████████░  95% ⚠️ ERREURS À CORRIGER
-
-PROGRESSION GLOBALE : ~95%
-
-================================================================================
-                           PROCHAINES ÉTAPES
-================================================================================
-
-1. [URGENT] Corriger les erreurs sur Streamlit Cloud
-   - Utiliser Chrome DevTools MCP pour diagnostiquer
-   - Corriger le code
-   - Push et vérifier
-
-2. [OPTIONNEL] Finaliser
-   - Exécuter les tests localement
-   - Ajouter screenshots au README
-   - Mettre à jour liens personnels
 
 ================================================================================
                                     FIN
