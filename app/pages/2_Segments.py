@@ -2,25 +2,18 @@
 Page Segments - Détail de chaque segment.
 """
 
-import streamlit as st
-import pandas as pd
 import plotly.express as px
-from pathlib import Path
+import streamlit as st
 
 st.set_page_config(page_title="Segments", page_icon="👥", layout="wide")
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-from src.config import SEGMENT_NAMES, SEGMENT_COLORS, SEGMENT_DESCRIPTIONS
+from app.utils import load_rfm_data
+from src.config import SEGMENT_COLORS, SEGMENT_DESCRIPTIONS, SEGMENT_NAMES
 
 
 @st.cache_data
 def load_data():
-    import sys
-    root = Path(__file__).parent.parent.parent
-    sys.path.insert(0, str(root))
-    from app.utils import load_rfm_data
+    """Charge les données RFM."""
     return load_rfm_data()
 
 
@@ -87,7 +80,7 @@ def main():
             title="Distribution de la récence",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, width="stretch")
 
     with col_mid:
         fig = px.histogram(
@@ -97,7 +90,7 @@ def main():
             title="Distribution de la fréquence",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, width="stretch")
 
     with col_right:
         fig = px.histogram(
@@ -107,7 +100,7 @@ def main():
             title="Distribution du montant",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, width="stretch")
 
     # Recommandations marketing
     st.divider()
@@ -125,7 +118,7 @@ def main():
             "Solliciter des avis et témoignages",
         ],
         2: [
-            "Lancer une campagne de réactivation (\"Vous nous manquez\")",
+            'Lancer une campagne de réactivation ("Vous nous manquez")',
             "Proposer une offre promotionnelle attractive",
             "Enquête de satisfaction pour comprendre l'inactivité",
         ],
@@ -145,7 +138,7 @@ def main():
 
     st.dataframe(
         segment_data.sample(min(10, len(segment_data))),
-        width='stretch',
+        width="stretch",
     )
 
 

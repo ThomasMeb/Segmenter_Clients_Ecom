@@ -2,25 +2,18 @@
 Page Explorer - Exploration interactive des données.
 """
 
-import streamlit as st
-import pandas as pd
 import plotly.express as px
-from pathlib import Path
+import streamlit as st
 
 st.set_page_config(page_title="Explorer", page_icon="🔍", layout="wide")
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-
-from src.config import SEGMENT_NAMES, SEGMENT_COLORS
+from app.utils import load_rfm_data
+from src.config import SEGMENT_COLORS, SEGMENT_NAMES
 
 
 @st.cache_data
 def load_data():
-    import sys
-    root = Path(__file__).parent.parent.parent
-    sys.path.insert(0, str(root))
-    from app.utils import load_rfm_data
+    """Charge les données RFM."""
     return load_rfm_data()
 
 
@@ -72,19 +65,21 @@ def main():
 
     # Application des filtres
     filtered_data = data[
-        (data["recency"] >= recency_range[0]) &
-        (data["recency"] <= recency_range[1]) &
-        (data["frequency"] >= freq_range[0]) &
-        (data["frequency"] <= freq_range[1]) &
-        (data["monetary"] >= monetary_range[0]) &
-        (data["monetary"] <= monetary_range[1])
+        (data["recency"] >= recency_range[0])
+        & (data["recency"] <= recency_range[1])
+        & (data["frequency"] >= freq_range[0])
+        & (data["frequency"] <= freq_range[1])
+        & (data["monetary"] >= monetary_range[0])
+        & (data["monetary"] <= monetary_range[1])
     ]
 
     if selected_segments is not None and "segment" in data.columns:
         filtered_data = filtered_data[filtered_data["segment"].isin(selected_segments)]
 
     # Stats filtrées
-    st.info(f"**{len(filtered_data):,}** clients correspondent aux critères ({len(filtered_data)/len(data)*100:.1f}% du total)")
+    st.info(
+        f"**{len(filtered_data):,}** clients correspondent aux critères ({len(filtered_data)/len(data)*100:.1f}% du total)"
+    )
 
     st.divider()
 
@@ -97,13 +92,21 @@ def main():
         col1, col2 = st.columns(2)
 
         with col1:
-            x_axis = st.selectbox("Axe X", ["recency", "frequency", "monetary"], index=0)
+            x_axis = st.selectbox(
+                "Axe X", ["recency", "frequency", "monetary"], index=0
+            )
         with col2:
-            y_axis = st.selectbox("Axe Y", ["recency", "frequency", "monetary"], index=2)
+            y_axis = st.selectbox(
+                "Axe Y", ["recency", "frequency", "monetary"], index=2
+            )
 
         # Échantillonnage si trop de données
         sample_size = min(5000, len(filtered_data))
-        plot_data = filtered_data.sample(sample_size) if len(filtered_data) > sample_size else filtered_data
+        plot_data = (
+            filtered_data.sample(sample_size)
+            if len(filtered_data) > sample_size
+            else filtered_data
+        )
 
         if "segment" in plot_data.columns:
             plot_data["segment_name"] = plot_data["segment"].map(SEGMENT_NAMES)
@@ -113,7 +116,9 @@ def main():
                 x=x_axis,
                 y=y_axis,
                 color="segment_name",
-                color_discrete_map={v: SEGMENT_COLORS[k] for k, v in SEGMENT_NAMES.items()},
+                color_discrete_map={
+                    v: SEGMENT_COLORS[k] for k, v in SEGMENT_NAMES.items()
+                },
                 opacity=0.6,
                 title=f"{y_axis.capitalize()} vs {x_axis.capitalize()}",
             )
@@ -126,13 +131,17 @@ def main():
                 title=f"{y_axis.capitalize()} vs {x_axis.capitalize()}",
             )
 
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, width="stretch")
 
     with tab2:
         st.subheader("Visualisation 3D")
 
         sample_size = min(3000, len(filtered_data))
-        plot_data = filtered_data.sample(sample_size) if len(filtered_data) > sample_size else filtered_data
+        plot_data = (
+            filtered_data.sample(sample_size)
+            if len(filtered_data) > sample_size
+            else filtered_data
+        )
 
         if "segment" in plot_data.columns:
             plot_data["segment_name"] = plot_data["segment"].map(SEGMENT_NAMES)
@@ -143,7 +152,9 @@ def main():
                 y="frequency",
                 z="monetary",
                 color="segment_name",
-                color_discrete_map={v: SEGMENT_COLORS[k] for k, v in SEGMENT_NAMES.items()},
+                color_discrete_map={
+                    v: SEGMENT_COLORS[k] for k, v in SEGMENT_NAMES.items()
+                },
                 opacity=0.6,
                 title="Segmentation 3D (RFM)",
             )
@@ -156,12 +167,12 @@ def main():
                 opacity=0.6,
             )
 
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, width="stretch")
 
     with tab3:
         st.subheader("Données filtrées")
 
-        st.dataframe(filtered_data, width='stretch')
+        st.dataframe(filtered_data, width="stretch")
 
         # Export
         csv = filtered_data.to_csv(index=True)

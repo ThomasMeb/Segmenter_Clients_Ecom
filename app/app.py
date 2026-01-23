@@ -4,16 +4,9 @@ Point d'entrée du dashboard Streamlit.
 Lance l'application avec : streamlit run app/app.py
 """
 
-import streamlit as st
-import pandas as pd
 from pathlib import Path
-import sys
 
-# Ajouter les répertoires au path pour les imports
-ROOT_DIR = Path(__file__).parent.parent
-APP_DIR = Path(__file__).parent
-sys.path.insert(0, str(ROOT_DIR))
-sys.path.insert(0, str(APP_DIR))
+import streamlit as st
 
 # Configuration de la page
 st.set_page_config(
@@ -23,23 +16,23 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+from app.utils import load_rfm_data
+from src.models.clustering import CustomerSegmenter
+
 # Paths
-DATA_DIR = ROOT_DIR / "data" / "processed"
+ROOT_DIR = Path(__file__).parent.parent
 MODELS_DIR = ROOT_DIR / "models"
 
 
 @st.cache_data
 def load_data():
     """Charge les données RFM avec mise en cache."""
-    from utils import load_rfm_data
     return load_rfm_data()
 
 
 @st.cache_resource
 def load_model():
     """Charge le modèle de segmentation."""
-    from src.models.clustering import CustomerSegmenter
-
     try:
         return CustomerSegmenter.load(MODELS_DIR)
     except FileNotFoundError:
@@ -51,23 +44,27 @@ def main():
 
     # Header
     st.title("🛒 Olist Customer Segmentation")
-    st.markdown("""
+    st.markdown(
+        """
     Dashboard interactif pour explorer la segmentation des clients Olist
     basée sur l'analyse RFM (Recency, Frequency, Monetary).
-    """)
+    """
+    )
 
     st.divider()
 
     # Chargement des données
     data, is_real_data = load_data()
-    model = load_model()
+    _model = load_model()  # Pour usage futur
 
     # Avertissement si données de démo
     if not is_real_data:
-        st.info("""
+        st.info(
+            """
         📊 **Mode Démonstration** - Les données affichées sont générées pour illustration.
         Pour utiliser les vraies données Olist, exécutez `python scripts/prepare_dashboard_data.py`.
-        """)
+        """
+        )
 
     # Sidebar
     st.sidebar.title("Navigation")
@@ -113,16 +110,18 @@ def main():
 
     # Aperçu des données
     st.subheader("📊 Aperçu des données")
-    st.dataframe(data.head(10), width='stretch')
+    st.dataframe(data.head(10), width="stretch")
 
     # Footer
     st.divider()
-    st.markdown("""
+    st.markdown(
+        """
     ---
     **Olist Customer Segmentation** |
     [GitHub](https://github.com/thomasmebarki/olist-customer-segmentation) |
     Créé par Thomas Mebarki
-    """)
+    """
+    )
 
 
 if __name__ == "__main__":

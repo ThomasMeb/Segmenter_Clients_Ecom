@@ -107,6 +107,11 @@ exclude = [
     "notebooks",
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Streamlit requires st.set_page_config() before other imports
+"app/*.py" = ["E402"]
+"app/pages/*.py" = ["E402"]
+
 [tool.isort]
 profile = "black"
 line_length = 88
