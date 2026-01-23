@@ -5,20 +5,20 @@ Ce module fournit des fonctions standardisées pour créer
 des graphiques de qualité publication.
 """
 
-from typing import Optional, List, Dict
+from __future__ import annotations
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
+import seaborn as sns
 
 from src.config import (
     FIGURE_SIZE,
     PLOT_STYLE,
-    SEGMENT_NAMES,
     SEGMENT_COLORS,
+    SEGMENT_NAMES,
 )
 
 # Configuration globale
@@ -26,11 +26,11 @@ sns.set_style(PLOT_STYLE)
 
 
 def plot_elbow_curve(
-    k_values: List[int],
-    inertias: List[float],
-    silhouettes: Optional[List[float]] = None,
+    k_values: list[int],
+    inertias: list[float],
+    silhouettes: list[float] | None = None,
     figsize: tuple = FIGURE_SIZE,
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> plt.Figure:
     """
     Trace la courbe du coude pour déterminer le nombre optimal de clusters.
@@ -86,7 +86,7 @@ def plot_silhouette(
     X: np.ndarray,
     labels: np.ndarray,
     figsize: tuple = FIGURE_SIZE,
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> plt.Figure:
     """
     Trace le diagramme de silhouette pour chaque cluster.
@@ -137,7 +137,12 @@ def plot_silhouette(
         ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
         y_lower = y_upper + 10
 
-    ax.axvline(x=silhouette_avg, color="red", linestyle="--", label=f"Moyenne: {silhouette_avg:.3f}")
+    ax.axvline(
+        x=silhouette_avg,
+        color="red",
+        linestyle="--",
+        label=f"Moyenne: {silhouette_avg:.3f}",
+    )
     ax.set_xlabel("Coefficient de Silhouette", fontsize=12)
     ax.set_ylabel("Cluster", fontsize=12)
     ax.set_title("Analyse de Silhouette", fontsize=14)
@@ -154,7 +159,7 @@ def plot_silhouette(
 def plot_cluster_distribution(
     labels: np.ndarray,
     figsize: tuple = (10, 6),
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> plt.Figure:
     """
     Trace la distribution des clients par segment.
@@ -187,7 +192,7 @@ def plot_cluster_distribution(
     ax1.set_title("Distribution des segments", fontsize=14)
 
     # Ajouter les valeurs sur les barres
-    for i, (name, count) in enumerate(zip(segment_names, counts)):
+    for i, (_name, count) in enumerate(zip(segment_names, counts, strict=True)):
         ax1.text(i, count + 500, f"{count:,}", ha="center", fontsize=10)
 
     # Pie chart
@@ -213,7 +218,7 @@ def plot_rfm_boxplots(
     df: pd.DataFrame,
     labels: np.ndarray,
     figsize: tuple = (15, 5),
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> plt.Figure:
     """
     Trace les boxplots RFM par segment.
@@ -235,15 +240,28 @@ def plot_rfm_boxplots(
         Figure matplotlib.
     """
     df = df.copy()
-    df["segment"] = [SEGMENT_NAMES.get(l, f"Cluster {l}") for l in labels]
+    df["segment"] = [SEGMENT_NAMES.get(label, f"Cluster {label}") for label in labels]
 
     fig, axes = plt.subplots(1, 3, figsize=figsize)
 
     features = ["recency", "frequency", "monetary"]
     titles = ["Récence (jours)", "Fréquence", "Montant (BRL)"]
 
-    for ax, feature, title in zip(axes, features, titles):
-        sns.boxplot(data=df, x="segment", y=feature, ax=ax, palette=SEGMENT_COLORS)
+    # Créer une palette avec les noms de segments comme clés
+    palette = {
+        SEGMENT_NAMES.get(k, f"Cluster {k}"): v for k, v in SEGMENT_COLORS.items()
+    }
+
+    for ax, feature, title in zip(axes, features, titles, strict=True):
+        sns.boxplot(
+            data=df,
+            x="segment",
+            y=feature,
+            ax=ax,
+            hue="segment",
+            palette=palette,
+            legend=False,
+        )
         ax.set_xlabel("Segment", fontsize=12)
         ax.set_ylabel(title, fontsize=12)
         ax.set_title(f"Distribution de {title}", fontsize=12)
@@ -259,7 +277,7 @@ def plot_rfm_boxplots(
 
 def plot_radar_chart(
     cluster_centers: pd.DataFrame,
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> go.Figure:
     """
     Trace un radar chart des profils de segments.
@@ -291,24 +309,28 @@ def plot_radar_chart(
     categories = centers_normalized.columns.tolist()
     categories += [categories[0]]  # Fermer le polygone
 
-    for i, (idx, row) in enumerate(centers_normalized.iterrows()):
+    for i, (_idx, row) in enumerate(centers_normalized.iterrows()):
         values = row.tolist()
         values += [values[0]]  # Fermer le polygone
 
         segment_name = SEGMENT_NAMES.get(i, f"Cluster {i}")
 
-        fig.add_trace(go.Scatterpolar(
-            r=values,
-            theta=categories,
-            fill="toself",
-            name=segment_name,
-            line_color=SEGMENT_COLORS.get(i, f"rgb({i*60}, {100+i*30}, {200-i*40})"),
-        ))
+        fig.add_trace(
+            go.Scatterpolar(
+                r=values,
+                theta=categories,
+                fill="toself",
+                name=segment_name,
+                line_color=SEGMENT_COLORS.get(
+                    i, f"rgb({i*60}, {100+i*30}, {200-i*40})"
+                ),
+            )
+        )
 
     fig.update_layout(
-        polar=dict(
-            radialaxis=dict(visible=True, range=[0, 1]),
-        ),
+        polar={
+            "radialaxis": {"visible": True, "range": [0, 1]},
+        },
         showlegend=True,
         title="Profil des segments (normalisé)",
     )
@@ -322,7 +344,7 @@ def plot_radar_chart(
 def plot_scatter_3d(
     df: pd.DataFrame,
     labels: np.ndarray,
-    save_path: Optional[str] = None,
+    save_path: str | None = None,
 ) -> go.Figure:
     """
     Trace un scatter plot 3D des clusters.
@@ -342,7 +364,7 @@ def plot_scatter_3d(
         Figure Plotly interactive.
     """
     df = df.copy()
-    df["segment"] = [SEGMENT_NAMES.get(l, f"Cluster {l}") for l in labels]
+    df["segment"] = [SEGMENT_NAMES.get(label, f"Cluster {label}") for label in labels]
 
     fig = px.scatter_3d(
         df,
@@ -361,11 +383,11 @@ def plot_scatter_3d(
     )
 
     fig.update_layout(
-        scene=dict(
-            xaxis_title="Récence",
-            yaxis_title="Fréquence",
-            zaxis_title="Montant",
-        )
+        scene={
+            "xaxis_title": "Récence",
+            "yaxis_title": "Fréquence",
+            "zaxis_title": "Montant",
+        }
     )
 
     if save_path:

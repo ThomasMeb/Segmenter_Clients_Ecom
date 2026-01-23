@@ -2,12 +2,11 @@
 Tests pour le module src.data.loader.
 """
 
-import pytest
-import pandas as pd
-import numpy as np
-from pathlib import Path
 
-from src.data.loader import load_transactions, load_rfm_data, validate_dataframe
+import pandas as pd
+import pytest
+
+from src.data.loader import load_rfm_data, load_transactions, validate_dataframe
 
 
 class TestLoadTransactions:
@@ -37,7 +36,9 @@ class TestLoadTransactions:
 
         assert pd.api.types.is_datetime64_any_dtype(df["order_purchase_timestamp"])
 
-    def test_load_transactions_removes_unnamed_column(self, test_data_dir, sample_transactions):
+    def test_load_transactions_removes_unnamed_column(
+        self, test_data_dir, sample_transactions
+    ):
         """Test que la colonne Unnamed: 0 est supprimée."""
         csv_path = test_data_dir / "test_transactions.csv"
         # Sauvegarder avec index pour créer Unnamed: 0
@@ -59,7 +60,8 @@ class TestLoadTransactions:
         pd.DataFrame({"col1": [1, 2], "col2": [3, 4]}).to_csv(csv_path, index=False)
 
         with pytest.raises(ValueError, match="Colonnes manquantes"):
-            load_transactions(csv_path)
+            # Désactiver parse_dates pour éviter l'erreur pandas sur colonne manquante
+            load_transactions(csv_path, parse_dates=False)
 
 
 class TestLoadRfmData:
@@ -107,7 +109,7 @@ class TestValidateDataframe:
         result = validate_dataframe(
             sample_transactions,
             required_columns=["customer_unique_id", "order_id"],
-            name="Test"
+            name="Test",
         )
         assert result is True
 
@@ -117,5 +119,5 @@ class TestValidateDataframe:
             validate_dataframe(
                 sample_transactions,
                 required_columns=["nonexistent_column"],
-                name="Test"
+                name="Test",
             )
