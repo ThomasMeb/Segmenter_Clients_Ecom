@@ -49,13 +49,13 @@ dependencies = [
 dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
-    "black>=23.9.0",
     "ruff>=0.1.0",
-    "isort>=5.12.0",
     "mypy>=1.5.0",
     "pre-commit>=3.4.0",
     "ipykernel>=6.25.0",
     "jupyter>=1.0.0",
+    "python-semantic-release>=8.0.0",
+    "build>=1.0.0",
 ]
 
 [project.urls]
@@ -132,3 +132,19 @@ addopts = "-v --cov=src --cov-report=term-missing"
 [tool.coverage.run]
 source = ["src"]
 omit = ["tests/*", "notebooks/*"]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+upload_to_pypi = false
+upload_to_release = true
+build_command = "pip install build && python -m build"
+commit_message = "chore(release): v{version}"
+
+[tool.semantic_release.changelog]
+changelog_file = "CHANGELOG.md"
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["build", "chore", "ci", "docs", "feat", "fix", "perf", "style", "refactor", "test"]
+minor_tags = ["feat"]
+patch_tags = ["fix", "perf"]

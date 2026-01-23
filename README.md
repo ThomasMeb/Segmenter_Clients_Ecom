@@ -1,9 +1,11 @@
 # Olist Customer Segmentation
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
+[![CI](https://github.com/thomasmebarki/olist-customer-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/thomasmebarki/olist-customer-segmentation/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/thomasmebarki/olist-customer-segmentation/branch/main/graph/badge.svg)](https://codecov.io/gh/thomasmebarki/olist-customer-segmentation)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![CI](https://github.com/username/olist-customer-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/username/olist-customer-segmentation/actions)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Code style: ruff-format](https://img.shields.io/badge/code%20style-ruff--format-black)](https://github.com/astral-sh/ruff)
 
 Customer segmentation system for Olist e-commerce using RFM analysis and KMeans clustering. Includes an interactive Streamlit dashboard for exploring customer segments.
 
@@ -62,38 +64,57 @@ This project implements a customer segmentation solution for **Olist**, a Brazil
 
 ### Prerequisites
 
-- Python 3.9 or higher
+- Python 3.10 or higher
 - Git LFS (for large data files)
 
-### Setup
+### Quick Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/username/olist-customer-segmentation.git
-   cd olist-customer-segmentation
-   ```
+```bash
+# Clone and setup
+git clone https://github.com/thomasmebarki/olist-customer-segmentation.git
+cd olist-customer-segmentation
 
-2. **Create virtual environment**
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Linux/Mac
-   # or .venv\Scripts\activate  # Windows
-   ```
+# Run the setup script
+./scripts/setup.sh
 
-3. **Install dependencies**
-   ```bash
-   pip install -e ".[dev]"
-   ```
+# Or manually:
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+pre-commit install
+```
 
-4. **Initialize Git LFS** (for data files)
-   ```bash
-   git lfs install
-   git lfs pull
-   ```
+### Using Make
+
+```bash
+make install-dev  # Install with dev dependencies
+make test         # Run tests
+make lint         # Run linters
+make serve        # Start dashboard
+```
 
 ## Usage
 
-### Quick Start
+### CLI Commands
+
+```bash
+# Train the model
+olist-segment train --input data/raw/data.csv --verbose
+
+# Predict segments for new customers
+olist-segment predict --input new_customers.csv --output predictions.csv
+
+# Evaluate model metrics
+olist-segment evaluate --verbose
+
+# Start the dashboard
+olist-segment serve --port 8501
+
+# Show project info
+olist-segment info --verbose
+```
+
+### Python API
 
 ```python
 from src.data.loader import load_transactions
@@ -119,7 +140,14 @@ print(summary)
 ### Run the Dashboard
 
 ```bash
+# Using CLI
+olist-segment serve
+
+# Or directly with Streamlit
 streamlit run app/app.py
+
+# Or using Make
+make serve
 ```
 
 Then open http://localhost:8501 in your browser.
@@ -149,42 +177,34 @@ pytest tests/ -v --cov=src --cov-report=html
 
 ```
 olist-customer-segmentation/
+├── .github/workflows/            # CI/CD pipelines
+│   ├── ci.yml                    # Continuous Integration
+│   ├── release.yml               # Release automation
+│   └── pr-preview.yml            # PR preview comments
 ├── app/                          # Streamlit dashboard
 │   ├── app.py                    # Main entry point
 │   └── pages/                    # Dashboard pages
-│       ├── 1_Overview.py
-│       ├── 2_Segments.py
-│       ├── 3_Explorer.py
-│       └── 4_About.py
 ├── data/
 │   ├── raw/                      # Original datasets
 │   └── processed/                # Processed RFM data
 ├── docs/                         # Documentation
-│   ├── ARCHITECTURE.md
-│   └── SPECIFICATIONS_TECHNIQUES.md
 ├── models/                       # Saved models
-│   ├── kmeans_model.pkl
-│   └── scaler.pkl
 ├── notebooks/                    # Jupyter notebooks
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_feature_engineering.ipynb
-│   ├── 03_modeling.ipynb
-│   └── 04_results_analysis.ipynb
+├── scripts/                      # Automation scripts
+│   ├── setup.sh                  # Environment setup
+│   ├── train.sh                  # Training pipeline
+│   └── download_data.sh          # Data download
 ├── src/                          # Source code
+│   ├── cli.py                    # CLI commands
 │   ├── config.py                 # Configuration
-│   ├── data/
-│   │   ├── loader.py             # Data loading
-│   │   └── preprocessor.py       # Data cleaning
-│   ├── features/
-│   │   └── rfm.py                # RFM calculation
-│   ├── models/
-│   │   ├── clustering.py         # Segmentation model
-│   │   └── evaluation.py         # Model metrics
-│   └── visualization/
-│       └── plots.py              # Plotting functions
-├── tests/                        # Unit tests
+│   ├── data/                     # Data loading & preprocessing
+│   ├── features/                 # Feature engineering (RFM)
+│   ├── models/                   # Clustering & evaluation
+│   └── visualization/            # Plotting functions
+├── tests/                        # Unit tests (152 tests)
+├── Makefile                      # Build automation
 ├── pyproject.toml                # Project configuration
-├── requirements.txt              # Dependencies
+├── CHANGELOG.md                  # Version history
 └── README.md
 ```
 
@@ -258,9 +278,23 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Run tests (`make check`)
+4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+### Development Setup
+
+```bash
+# Install dev dependencies
+make install-dev
+
+# Run all checks
+make check
+
+# Format code
+make format
+```
 
 ## License
 
@@ -270,8 +304,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Thomas Mebarki**
 
-- GitHub: [@username](https://github.com/username)
-- LinkedIn: [Thomas Mebarki](https://linkedin.com/in/username)
+- GitHub: [@thomasmebarki](https://github.com/thomasmebarki)
 
 ---
 
