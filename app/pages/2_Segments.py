@@ -87,7 +87,7 @@ def main():
             title="Distribution de la récence",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with col_mid:
         fig = px.histogram(
@@ -97,7 +97,7 @@ def main():
             title="Distribution de la fréquence",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with col_right:
         fig = px.histogram(
@@ -107,7 +107,7 @@ def main():
             title="Distribution du montant",
             color_discrete_sequence=[SEGMENT_COLORS.get(selected_segment, "#3498db")],
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     # Recommandations marketing
     st.divider()
@@ -145,7 +145,7 @@ def main():
 
     st.dataframe(
         segment_data.sample(min(10, len(segment_data))),
-        use_container_width=True,
+        width='stretch',
     )
 
 

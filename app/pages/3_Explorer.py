@@ -126,7 +126,7 @@ def main():
                 title=f"{y_axis.capitalize()} vs {x_axis.capitalize()}",
             )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with tab2:
         st.subheader("Visualisation 3D")
@@ -156,12 +156,12 @@ def main():
                 opacity=0.6,
             )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with tab3:
         st.subheader("Données filtrées")
 
-        st.dataframe(filtered_data, use_container_width=True)
+        st.dataframe(filtered_data, width='stretch')
 
         # Export
         csv = filtered_data.to_csv(index=True)

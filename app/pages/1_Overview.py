@@ -77,7 +77,7 @@ def main():
                 hole=0.4,
             )
             fig.update_traces(textinfo="percent+label")
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
     with col_right:
         st.subheader("Profil des segments (Radar)")
@@ -109,7 +109,7 @@ def main():
                 showlegend=True,
             )
 
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
     # Tableau récapitulatif
     st.divider()
@@ -131,7 +131,7 @@ def main():
         summary["Clients"] = data.groupby("segment").size()
         summary.index = [SEGMENT_NAMES.get(i, f"Segment {i}") for i in summary.index]
 
-        st.dataframe(summary, use_container_width=True)
+        st.dataframe(summary, width='stretch')
 
 
 if __name__ == "__main__":

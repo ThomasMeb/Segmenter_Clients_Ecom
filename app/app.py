@@ -113,7 +113,7 @@ def main():
 
     # Aperçu des données
     st.subheader("📊 Aperçu des données")
-    st.dataframe(data.head(10), use_container_width=True)
+    st.dataframe(data.head(10), width='stretch')
 
     # Footer
     st.divider()
