@@ -21,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - User guides: Quick Start, Installation, CLI, API, Dashboard
   - FAQ with common troubleshooting
   - `make docs` and `make docs-live` commands
+- **Phase 6: MLOps & Monitoring**
+  - Model Registry with versioning and metadata
+  - Drift Detection (ARI-based model drift, KS-based data drift)
+  - DriftDetector class with fit/detect workflow
+  - Maintenance notebook (notebooks/05_maintenance.ipynb)
+  - GitHub Actions workflow for scheduled maintenance
+  - 23 new tests for monitoring module
 
 ### Changed
 - Migrated from black to ruff-format

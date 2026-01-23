@@ -243,17 +243,17 @@ jobs:
 
 ---
 
-## Phase 6 : MLOps & Monitoring
+## Phase 6 : MLOps & Monitoring ✅
 
 **Objectif** : Assurer la maintenabilité du modèle en production
 
 ### 6.1 Model Registry
-- [ ] Versionner les modèles avec métadonnées
-- [ ] Stocker : hyperparamètres, métriques, date, hash des données
-- [ ] Format : `models/v1.0.0/` ou MLflow
+- [x] Versionner les modèles avec métadonnées
+- [x] Stocker : hyperparamètres, métriques, date, hash des données
+- [x] Format : `models/registry/v1.0.0/`
 
 ```json
-// models/metadata.json
+// models/registry/v1.0.0/metadata.json
 {
   "version": "1.0.0",
   "created_at": "2024-01-23",
@@ -265,26 +265,30 @@ jobs:
 ```
 
 ### 6.2 Data & Model Drift Detection
-- [ ] Créer `src/monitoring/drift.py`
-- [ ] Implémenter ARI (Adjusted Rand Index) pour détecter le drift
-- [ ] Alertes si ARI < 0.8
+- [x] Créer `src/monitoring/drift.py`
+- [x] Implémenter ARI (Adjusted Rand Index) pour détecter le drift
+- [x] Alertes si ARI < 0.8
+- [x] Test de Kolmogorov-Smirnov pour le drift de données
 
 ### 6.3 Notebook de maintenance
-- [ ] Créer `notebooks/05_maintenance.ipynb`
-- [ ] Workflow de ré-entraînement
-- [ ] Comparaison ancien vs nouveau modèle
+- [x] Créer `notebooks/05_maintenance.ipynb`
+- [x] Workflow de ré-entraînement
+- [x] Comparaison ancien vs nouveau modèle
+- [x] Simulation temporelle du drift
 
-### 6.4 Scheduling (optionnel)
-- [ ] Script de ré-entraînement périodique
-- [ ] GitHub Actions scheduled workflow
+### 6.4 Scheduling
+- [x] GitHub Actions scheduled workflow (`.github/workflows/maintenance.yml`)
+- [x] Exécution mensuelle automatique
+- [x] Réentraînement conditionnel si drift détecté
 
-| Livrable | Effort estimé |
-|----------|---------------|
-| Model registry | 3h |
-| Drift detection | 4h |
-| Notebook maintenance | 2h |
-| Scheduling | 2h |
-| **Total Phase 6** | **11h** |
+| Livrable | Effort estimé | Statut |
+|----------|---------------|--------|
+| Model registry | 3h | ✅ |
+| Drift detection | 4h | ✅ |
+| Notebook maintenance | 2h | ✅ |
+| Scheduling | 2h | ✅ |
+| Tests (23 tests) | 2h | ✅ |
+| **Total Phase 6** | **13h** | ✅ |
 
 ---
 

@@ -85,3 +85,12 @@ COLOR_PALETTE = "husl"
 
 KMEANS_MODEL_FILE = MODELS_DIR / "kmeans_model.pkl"
 SCALER_FILE = MODELS_DIR / "scaler.pkl"
+
+# =============================================================================
+# MONITORING & MLOPS
+# =============================================================================
+
+MODEL_REGISTRY_DIR = MODELS_DIR / "registry"
+ARI_THRESHOLD = 0.8  # Seuil pour la détection de drift
+DRIFT_PVALUE_THRESHOLD = 0.05  # Seuil p-value pour le test KS
+RETRAINING_FREQUENCY_MONTHS = 3  # Fréquence recommandée de réentraînement

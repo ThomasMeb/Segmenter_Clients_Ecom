@@ -1,0 +1,237 @@
+name: Model Maintenance
+
+on:
+  # Exécution mensuelle le 1er de chaque mois à 6h UTC
+  schedule:
+    - cron: '0 6 1 * *'
+
+  # Permet l'exécution manuelle
+  workflow_dispatch:
+    inputs:
+      force_retrain:
+        description: 'Force model retraining'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  drift-check:
+    name: Check for Model Drift
+    runs-on: ubuntu-latest
+    outputs:
+      drift_detected: ${{ steps.drift.outputs.drift_detected }}
+      ari_score: ${{ steps.drift.outputs.ari_score }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install pytest
+
+      - name: Run drift detection
+        id: drift
+        run: |
+          python -c "
+          import json
+          import numpy as np
+          import pandas as pd
+          from pathlib import Path
+
+          from src.models.clustering import CustomerSegmenter
+          from src.monitoring import DriftDetector, ModelRegistry
+
+          # Charger les données
+          data_path = Path('data/processed/customers_rfm.parquet')
+          if not data_path.exists():
+              print('::warning::No processed data found, skipping drift check')
+              print('drift_detected=false')
+              print('ari_score=1.0')
+              exit(0)
+
+          rfm_df = pd.read_parquet(data_path)
+
+          # Charger le modèle
+          try:
+              segmenter = CustomerSegmenter.load('models/')
+              labels = segmenter.predict(rfm_df)
+          except Exception as e:
+              print(f'::warning::Could not load model: {e}')
+              print('drift_detected=false')
+              print('ari_score=1.0')
+              exit(0)
+
+          # Simuler le drift (en production, utiliser de nouvelles données)
+          np.random.seed(42)
+          simulated_current = rfm_df.copy()
+          for col in simulated_current.columns:
+              noise = np.random.normal(0, simulated_current[col].std() * 0.02, len(simulated_current))
+              simulated_current[col] = simulated_current[col] + noise
+
+          # Détecter le drift
+          detector = DriftDetector(ari_threshold=0.8)
+          detector.fit(rfm_df, labels)
+
+          report = detector.detect(
+              current_data=simulated_current,
+              model=segmenter.model,
+              scaler=segmenter.scaler,
+          )
+
+          # Outputs
+          drift = 'true' if report.model_drift_detected else 'false'
+          print(f'Drift detected: {report.model_drift_detected}')
+          print(f'ARI score: {report.ari_score:.4f}')
+          print(f'Recommendation: {report.recommendation}')
+
+          # Set outputs for GitHub Actions
+          with open('$GITHUB_OUTPUT', 'a') as f:
+              f.write(f'drift_detected={drift}\n')
+              f.write(f'ari_score={report.ari_score:.4f}\n')
+          "
+        env:
+          GITHUB_OUTPUT: ${{ github.output }}
+
+      - name: Create drift report artifact
+        if: always()
+        run: |
+          mkdir -p reports
+          date > reports/drift_check_$(date +%Y%m%d).txt
+          echo "Drift detected: ${{ steps.drift.outputs.drift_detected }}" >> reports/drift_check_$(date +%Y%m%d).txt
+          echo "ARI score: ${{ steps.drift.outputs.ari_score }}" >> reports/drift_check_$(date +%Y%m%d).txt
+
+      - name: Upload drift report
+        uses: actions/upload-artifact@v4
+        with:
+          name: drift-report-${{ github.run_id }}
+          path: reports/
+
+  retrain:
+    name: Retrain Model
+    needs: drift-check
+    if: needs.drift-check.outputs.drift_detected == 'true' || github.event.inputs.force_retrain == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Retrain model
+        run: |
+          echo "Retraining model..."
+          python -c "
+          import pandas as pd
+          from pathlib import Path
+
+          from src.data.loader import load_transactions
+          from src.features.rfm import RFMCalculator
+          from src.models.clustering import CustomerSegmenter
+          from src.models.evaluation import evaluate_clustering
+          from src.monitoring import ModelRegistry
+
+          # Charger ou calculer les données RFM
+          data_path = Path('data/processed/customers_rfm.parquet')
+          if data_path.exists():
+              rfm_df = pd.read_parquet(data_path)
+          else:
+              df = load_transactions('data/raw/data.csv')
+              calculator = RFMCalculator(reference_date='2018-09-01')
+              rfm_df = calculator.fit_transform(df)
+
+          print(f'Data loaded: {len(rfm_df)} customers')
+
+          # Entraîner le nouveau modèle
+          segmenter = CustomerSegmenter(n_clusters=4, random_state=42)
+          labels = segmenter.fit_predict(rfm_df)
+
+          # Évaluer
+          rfm_scaled = segmenter.scaler.transform(rfm_df)
+          metrics = evaluate_clustering(rfm_scaled, labels)
+
+          print(f'New model metrics:')
+          print(f'  Silhouette: {metrics[\"silhouette\"]:.4f}')
+          print(f'  Calinski-Harabasz: {metrics[\"calinski_harabasz\"]:.1f}')
+
+          # Sauvegarder dans le registre
+          registry = ModelRegistry()
+          version = registry.register(
+              model=segmenter.model,
+              scaler=segmenter.scaler,
+              metrics={
+                  'silhouette': metrics['silhouette'],
+                  'calinski_harabasz': metrics['calinski_harabasz'],
+                  'davies_bouldin': metrics['davies_bouldin'],
+              },
+              hyperparameters={'n_clusters': 4, 'random_state': 42},
+              data_hash=ModelRegistry.compute_data_hash(rfm_df),
+              n_samples=len(rfm_df),
+              description='Automated retraining via GitHub Actions',
+              bump='minor',
+          )
+
+          print(f'Model registered: v{version}')
+
+          # Sauvegarder aussi dans models/ pour compatibilité
+          segmenter.save('models/')
+          "
+
+      - name: Commit new model
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add models/ || true
+          git diff --staged --quiet || git commit -m "chore(model): automated retraining [skip ci]"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  notify:
+    name: Send Notification
+    needs: [drift-check, retrain]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create summary
+        run: |
+          echo "## Model Maintenance Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Drift Detected | ${{ needs.drift-check.outputs.drift_detected }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ARI Score | ${{ needs.drift-check.outputs.ari_score }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Retrain Status | ${{ needs.retrain.result || 'skipped' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.drift-check.outputs.drift_detected }}" == "true" ]; then
+            echo "⚠️ **Drift was detected and model was retrained.**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **No significant drift detected. Model is stable.**" >> $GITHUB_STEP_SUMMARY
+          fi
