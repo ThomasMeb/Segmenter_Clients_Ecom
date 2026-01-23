@@ -43,6 +43,7 @@ dependencies = [
     "joblib>=1.3.0",
     "pyarrow>=14.0.0",
     "click>=8.1.0",
+    "openpyxl>=3.1.0",
 ]
 
 [project.optional-dependencies]
@@ -117,8 +118,9 @@ exclude = [
 
 [tool.ruff.lint.per-file-ignores]
 # Streamlit requires st.set_page_config() before other imports
-"app/*.py" = ["E402"]
-"app/pages/*.py" = ["E402"]
+# C408: dict() is preferred for plotly configurations (more readable)
+"app/*.py" = ["E402", "C408"]
+"app/pages/*.py" = ["E402", "C408"]
 
 [tool.isort]
 profile = "black"

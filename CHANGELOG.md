@@ -28,6 +28,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Maintenance notebook (notebooks/05_maintenance.ipynb)
   - GitHub Actions workflow for scheduled maintenance
   - 23 new tests for monitoring module
+- **Phase 7: Dashboard Improvements**
+  - Export CSV/Excel functionality with download buttons
+  - Segment comparison view (side-by-side mode)
+  - Pagination for large data tables
+  - Search and sort functionality in Explorer
+  - Statistics tab with correlation matrix
+  - Tooltips on all metrics
+  - Enhanced filter controls with reset button
+  - Custom CSS styling for better UX
+  - openpyxl dependency for Excel export
 
 ### Changed
 - Migrated from black to ruff-format
