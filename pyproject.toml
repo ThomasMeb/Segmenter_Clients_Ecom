@@ -66,9 +66,9 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/thomasmebarki/olist-customer-segmentation"
-Repository = "https://github.com/thomasmebarki/olist-customer-segmentation"
-Documentation = "https://github.com/thomasmebarki/olist-customer-segmentation#readme"
+Homepage = "https://github.com/ThomasMeb/olist-customer-segmentation"
+Repository = "https://github.com/ThomasMeb/olist-customer-segmentation"
+Documentation = "https://github.com/ThomasMeb/olist-customer-segmentation#readme"
 
 [project.scripts]
 olist-segment = "src.cli:main"

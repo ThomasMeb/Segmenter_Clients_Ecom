@@ -10,12 +10,17 @@ st.set_page_config(page_title="About", page_icon="ℹ️", layout="wide")
 def main():
     st.title("ℹ️ À propos du projet")
 
-    st.markdown("""
-    ## Olist Customer Segmentation
+    st.markdown(
+        """
+    ## Customer Segmentation
 
-    Ce projet de Data Science a pour objectif de segmenter les clients de la plateforme
-    e-commerce brésilienne **Olist** en utilisant l'analyse **RFM** (Recency, Frequency, Monetary)
+    Ce projet de Data Science a été développé initialement pour une **mission client** (nom confidentiel)
+    avec pour objectif de segmenter les clients en utilisant l'analyse **RFM** (Recency, Frequency, Monetary)
     et le clustering **KMeans**.
+
+    > **Note** : Pour des raisons de confidentialité, ce portfolio utilise le dataset public
+    > **Olist** disponible sur Kaggle. La méthodologie reste identique à celle appliquée
+    > lors de la mission originale.
 
     ---
 
@@ -31,7 +36,7 @@ def main():
 
     ### 📊 Méthodologie
 
-    1. **Collecte des données** : Dataset Olist (Kaggle)
+    1. **Collecte des données** : Dataset Olist (Kaggle) pour la démonstration
     2. **Feature Engineering** : Calcul des features RFM
     3. **Preprocessing** : Standardisation (StandardScaler)
     4. **Modélisation** : KMeans (k=4)
@@ -74,8 +79,7 @@ def main():
 
     **Thomas Mebarki**
 
-    - 🔗 [LinkedIn](https://linkedin.com/in/thomasmebarki)
-    - 🐙 [GitHub](https://github.com/thomasmebarki)
+    - 🐙 [GitHub](https://github.com/ThomasMeb)
 
     ---
 
@@ -90,7 +94,8 @@ def main():
     ### 📄 License
 
     Ce projet est sous licence MIT.
-    """)
+    """
+    )
 
 
 if __name__ == "__main__":

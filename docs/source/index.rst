@@ -7,7 +7,13 @@ Olist Customer Segmentation
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
    :target: https://opensource.org/licenses/MIT
 
-Système de segmentation client pour Olist e-commerce utilisant l'analyse RFM et le clustering KMeans.
+Système de segmentation client utilisant l'analyse RFM et le clustering KMeans.
+
+.. note::
+
+   Ce projet a été initialement développé pour une mission client (nom confidentiel).
+   Pour des raisons de portfolio, il a été adapté avec le dataset public Olist
+   disponible sur `Kaggle <https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce>`_.
 
 .. toctree::
    :maxdepth: 2
@@ -44,7 +50,9 @@ Système de segmentation client pour Olist e-commerce utilisant l'analyse RFM et
 Aperçu du projet
 ----------------
 
-Ce projet implémente une solution de segmentation client pour **Olist**, une marketplace e-commerce brésilienne. En utilisant le framework RFM (Recency, Frequency, Monetary) et le machine learning non supervisé, nous identifions des segments de clients distincts pour permettre des stratégies marketing ciblées.
+Ce projet implémente une solution de segmentation client développée initialement pour une mission professionnelle (client confidentiel). En utilisant le framework RFM (Recency, Frequency, Monetary) et le machine learning non supervisé, nous identifions des segments de clients distincts pour permettre des stratégies marketing ciblées.
+
+Pour la démonstration, la méthodologie est appliquée au dataset **Olist**, une marketplace e-commerce brésilienne dont les données sont publiquement disponibles sur Kaggle.
 
 Fonctionnalités principales
 ---------------------------

@@ -69,5 +69,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 |---------|------|------------|
 | 1.0.0 | 2024-01-23 | Initial release with dashboard |
 
-[Unreleased]: https://github.com/thomasmebarki/olist-customer-segmentation/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/thomasmebarki/olist-customer-segmentation/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ThomasMeb/olist-customer-segmentation/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/ThomasMeb/olist-customer-segmentation/releases/tag/v1.0.0

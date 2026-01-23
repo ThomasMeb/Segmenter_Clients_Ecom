@@ -1,13 +1,15 @@
 # Olist Customer Segmentation
 
-[![CI](https://github.com/thomasmebarki/olist-customer-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/thomasmebarki/olist-customer-segmentation/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/thomasmebarki/olist-customer-segmentation/branch/main/graph/badge.svg)](https://codecov.io/gh/thomasmebarki/olist-customer-segmentation)
+[![CI](https://github.com/ThomasMeb/olist-customer-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/ThomasMeb/olist-customer-segmentation/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/ThomasMeb/olist-customer-segmentation/branch/main/graph/badge.svg)](https://codecov.io/gh/ThomasMeb/olist-customer-segmentation)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: ruff-format](https://img.shields.io/badge/code%20style-ruff--format-black)](https://github.com/astral-sh/ruff)
 
-Customer segmentation system for Olist e-commerce using RFM analysis and KMeans clustering. Includes an interactive Streamlit dashboard for exploring customer segments.
+Customer segmentation system using RFM analysis and KMeans clustering. Includes an interactive Streamlit dashboard for exploring customer segments.
+
+> **Note**: This project was originally developed for a client engagement (name confidential). For portfolio and demonstration purposes, it has been adapted to use the publicly available [Olist Brazilian E-Commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle.
 
 ![Dashboard Preview](docs/dashboard_preview.png)
 
@@ -26,11 +28,14 @@ Customer segmentation system for Olist e-commerce using RFM analysis and KMeans 
 
 ## Overview
 
-This project implements a customer segmentation solution for **Olist**, a Brazilian e-commerce marketplace. Using the RFM (Recency, Frequency, Monetary) framework and unsupervised machine learning, we identify distinct customer segments to enable targeted marketing strategies.
+This project implements a customer segmentation solution originally developed for a confidential client engagement. Using the RFM (Recency, Frequency, Monetary) framework and unsupervised machine learning, we identify distinct customer segments to enable targeted marketing strategies.
+
+For demonstration purposes, the methodology has been applied to the **Olist** dataset, a Brazilian e-commerce marketplace dataset publicly available on Kaggle.
 
 ### Business Context
 
-- **Company**: Olist - Brazilian e-commerce platform
+- **Original Mission**: Customer segmentation for a retail client (confidential)
+- **Demo Dataset**: Olist Brazilian E-Commerce (Kaggle)
 - **Challenge**: Segment 96,000+ customers for personalized marketing
 - **Solution**: RFM-based clustering with automated maintenance recommendations
 
@@ -71,7 +76,7 @@ This project implements a customer segmentation solution for **Olist**, a Brazil
 
 ```bash
 # Clone and setup
-git clone https://github.com/thomasmebarki/olist-customer-segmentation.git
+git clone https://github.com/ThomasMeb/olist-customer-segmentation.git
 cd olist-customer-segmentation
 
 # Run the setup script
@@ -270,7 +275,7 @@ The interactive Streamlit dashboard provides:
 
 ## Data Source
 
-This project uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle.
+This portfolio version uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle. The original client data remains confidential.
 
 ## Documentation
 
@@ -321,8 +326,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Thomas Mebarki**
 
-- GitHub: [@thomasmebarki](https://github.com/thomasmebarki)
+- GitHub: [@ThomasMeb](https://github.com/ThomasMeb)
 
 ---
 
-*This project was developed as part of a Data Science training program, focusing on unsupervised learning and customer segmentation techniques.*
+*This project was originally developed for a professional client engagement. For portfolio purposes, it has been adapted using the Olist dataset from Kaggle, demonstrating expertise in unsupervised learning and customer segmentation techniques.*

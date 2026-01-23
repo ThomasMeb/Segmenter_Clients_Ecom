@@ -117,8 +117,8 @@ def main():
     st.markdown(
         """
     ---
-    **Olist Customer Segmentation** |
-    [GitHub](https://github.com/thomasmebarki/olist-customer-segmentation) |
+    **Customer Segmentation** |
+    [GitHub](https://github.com/ThomasMeb/olist-customer-segmentation) |
     Créé par Thomas Mebarki
     """
     )

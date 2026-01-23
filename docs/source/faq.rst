@@ -13,7 +13,7 @@ La méthode recommandée est d'utiliser le script de setup :
 
 .. code-block:: bash
 
-   git clone https://github.com/thomasmebarki/olist-customer-segmentation.git
+   git clone https://github.com/ThomasMeb/olist-customer-segmentation.git
    cd olist-customer-segmentation
    ./scripts/setup.sh
 

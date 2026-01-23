@@ -21,7 +21,7 @@ La méthode la plus simple :
 
 .. code-block:: bash
 
-   git clone https://github.com/thomasmebarki/olist-customer-segmentation.git
+   git clone https://github.com/ThomasMeb/olist-customer-segmentation.git
    cd olist-customer-segmentation
    ./scripts/setup.sh
 
@@ -38,7 +38,7 @@ Installation manuelle
 .. code-block:: bash
 
    # Cloner le dépôt
-   git clone https://github.com/thomasmebarki/olist-customer-segmentation.git
+   git clone https://github.com/ThomasMeb/olist-customer-segmentation.git
    cd olist-customer-segmentation
 
    # Créer l'environnement virtuel
