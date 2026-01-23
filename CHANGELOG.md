@@ -14,11 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite (152 tests, 92% coverage)
 - Pre-commit hooks for code quality
 - CI/CD workflows for GitHub Actions
+- **Phase 5: Documentation**
+  - CODE_OF_CONDUCT.md (Contributor Covenant)
+  - Sphinx documentation setup with Furo theme
+  - API reference documentation with autodoc
+  - User guides: Quick Start, Installation, CLI, API, Dashboard
+  - FAQ with common troubleshooting
+  - `make docs` and `make docs-live` commands
 
 ### Changed
 - Migrated from black to ruff-format
 - Refactored imports to use absolute paths
 - Updated Streamlit API (use_container_width → width)
+- Updated pyproject.toml with docs dependencies
 
 ### Fixed
 - Palette bug in RFM boxplots visualization

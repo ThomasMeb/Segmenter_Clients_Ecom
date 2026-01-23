@@ -1,7 +1,7 @@
 # Makefile for Olist Customer Segmentation
 # ==========================================
 
-.PHONY: help install install-dev test lint format train serve clean check all
+.PHONY: help install install-dev test lint format train serve clean check all docs docs-live
 
 # Default target
 help:
@@ -21,6 +21,10 @@ help:
 	@echo "    make train        Train the segmentation model"
 	@echo "    make evaluate     Evaluate model metrics"
 	@echo "    make serve        Launch Streamlit dashboard"
+	@echo ""
+	@echo "  Documentation:"
+	@echo "    make docs         Build HTML documentation"
+	@echo "    make docs-live    Start docs server with auto-reload"
 	@echo ""
 	@echo "  Utilities:"
 	@echo "    make clean        Remove build artifacts and caches"
@@ -106,6 +110,23 @@ clean:
 
 info:
 	python -m src.cli info --verbose
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+
+docs:
+	@echo "Building documentation..."
+	cd docs && make html
+	@echo ""
+	@echo "Documentation built: open docs/_build/html/index.html"
+
+docs-live:
+	@echo "Starting documentation server with auto-reload..."
+	cd docs && make livehtml
+
+docs-clean:
+	cd docs && make clean
 
 # =============================================================================
 # COMBINED TARGETS

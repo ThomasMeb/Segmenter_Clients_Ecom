@@ -272,9 +272,26 @@ The interactive Streamlit dashboard provides:
 
 This project uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle.
 
+## Documentation
+
+Full documentation is available via Sphinx:
+
+```bash
+# Install documentation dependencies
+pip install -e ".[docs]"
+
+# Build the documentation
+make docs
+
+# Or with auto-reload for development
+make docs-live
+```
+
+Then open `docs/_build/html/index.html` in your browser.
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
