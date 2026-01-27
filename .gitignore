@@ -113,5 +113,10 @@ Desktop.ini
 # Streamlit
 .streamlit/secrets.toml
 
-# Keep data directory structure but ignore large files not in LFS
-# (LFS handles the actual data files)
+# Data (downloaded from Kaggle - not versioned)
+data/*.csv
+data/raw/*.csv
+data/processed/*.csv
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep

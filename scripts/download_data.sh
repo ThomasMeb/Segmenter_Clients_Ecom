@@ -106,9 +106,16 @@ else:
 EOF
 fi
 
+# Copy olist files to data/ directory for notebook compatibility
+echo -e "\n[4/4] Copying files for notebook compatibility..."
+cp data/raw/olist_*.csv data/
+cp data/raw/product_category_name_translation.csv data/
+
 echo -e "\n${GREEN}=============================================="
 echo "  Download complete!"
 echo "==============================================${NC}"
+echo ""
+echo "Files available in both data/ and data/raw/"
 echo ""
 echo "Next steps:"
 echo "  1. Train the model: make train"

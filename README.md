@@ -1,43 +1,39 @@
-# Olist Customer Segmentation
+# Back Market - Customer Segmentation
 
-[![CI](https://github.com/ThomasMeb/olist-customer-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/ThomasMeb/olist-customer-segmentation/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/ThomasMeb/olist-customer-segmentation/branch/main/graph/badge.svg)](https://codecov.io/gh/ThomasMeb/olist-customer-segmentation)
+[![CI](https://github.com/ThomasMeb/backmarket-segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/ThomasMeb/backmarket-segmentation/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Code style: ruff-format](https://img.shields.io/badge/code%20style-ruff--format-black)](https://github.com/astral-sh/ruff)
 
 Customer segmentation system using RFM analysis and KMeans clustering. Includes an interactive Streamlit dashboard for exploring customer segments.
 
-> **Note**: This project was originally developed for a client engagement (name confidential). For portfolio and demonstration purposes, it has been adapted to use the publicly available [Olist Brazilian E-Commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle.
+> **Portfolio Notice** : Ce repository est une **version portfolio** d'une mission freelance réalisée pour **Back Market** entre décembre 2023 et février 2024. Pour des raisons de confidentialité, les données client ont été remplacées par le dataset public [Olist Brazilian E-Commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), qui présente une structure similaire. La méthodologie RFM et l'architecture de clustering sont identiques à celles déployées en production.
 
 ![Dashboard Preview](docs/dashboard_preview.png)
 
-## Table of Contents
+---
 
-- [Overview](#overview)
-- [Key Results](#key-results)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Methodology](#methodology)
-- [Dashboard](#dashboard)
-- [Contributing](#contributing)
-- [License](#license)
+## Mission Context
 
-## Overview
+| Attribute | Details |
+|-----------|---------|
+| **Client** | Back Market |
+| **Mission Type** | Freelance - Data Science |
+| **Period** | December 2023 - February 2024 |
+| **Role** | Data Scientist |
 
-This project implements a customer segmentation solution originally developed for a confidential client engagement. Using the RFM (Recency, Frequency, Monetary) framework and unsupervised machine learning, we identify distinct customer segments to enable targeted marketing strategies.
+### About Back Market
 
-For demonstration purposes, the methodology has been applied to the **Olist** dataset, a Brazilian e-commerce marketplace dataset publicly available on Kaggle.
+**Back Market** est la licorne française leader du reconditionnement électronique. L'entreprise souhaitait segmenter sa base clients pour personnaliser ses campagnes marketing et améliorer la rétention.
 
-### Business Context
+### Deliverables
 
-- **Original Mission**: Customer segmentation for a retail client (confidential)
-- **Demo Dataset**: Olist Brazilian E-Commerce (Kaggle)
-- **Challenge**: Segment 96,000+ customers for personalized marketing
-- **Solution**: RFM-based clustering with automated maintenance recommendations
+- Pipeline ML complet (train, predict, evaluate)
+- Dashboard Streamlit interactif
+- CLI documentée
+- Simulation de maintenance (ARI drift detection)
+
+---
 
 ## Key Results
 
@@ -57,6 +53,8 @@ For demonstration purposes, the methodology has been applied to the **Olist** da
 | **Dormant** | 40% | Inactive for months | Reactivation campaign |
 | **VIP** | 3% | High value customers | Premium treatment |
 
+---
+
 ## Features
 
 - **RFM Feature Engineering**: Automated calculation of Recency, Frequency, and Monetary values
@@ -64,6 +62,8 @@ For demonstration purposes, the methodology has been applied to the **Olist** da
 - **Interactive Dashboard**: Streamlit-based visualization of segments
 - **Model Persistence**: Save/load trained models for production use
 - **Maintenance Simulation**: ARI-based drift detection for model updates
+
+---
 
 ## Installation
 
@@ -76,8 +76,8 @@ For demonstration purposes, the methodology has been applied to the **Olist** da
 
 ```bash
 # Clone and setup
-git clone https://github.com/ThomasMeb/olist-customer-segmentation.git
-cd olist-customer-segmentation
+git clone https://github.com/ThomasMeb/backmarket-segmentation.git
+cd backmarket-segmentation
 
 # Run the setup script
 ./scripts/setup.sh
@@ -89,6 +89,23 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 
+### Data Setup
+
+Les données ne sont pas incluses dans le repository. Téléchargez-les depuis Kaggle :
+
+```bash
+# 1. Configurer l'API Kaggle (une seule fois)
+pip install kaggle
+# Télécharger kaggle.json depuis https://www.kaggle.com/settings
+mkdir -p ~/.kaggle && mv ~/Downloads/kaggle.json ~/.kaggle/
+chmod 600 ~/.kaggle/kaggle.json
+
+# 2. Télécharger les données (~100MB)
+./scripts/download_data.sh
+```
+
+Ou téléchargez manuellement depuis [Olist Brazilian E-Commerce](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce).
+
 ### Using Make
 
 ```bash
@@ -97,6 +114,8 @@ make test         # Run tests
 make lint         # Run linters
 make serve        # Start dashboard
 ```
+
+---
 
 ## Usage
 
@@ -114,9 +133,6 @@ olist-segment evaluate --verbose
 
 # Start the dashboard
 olist-segment serve --port 8501
-
-# Show project info
-olist-segment info --verbose
 ```
 
 ### Python API
@@ -150,68 +166,42 @@ olist-segment serve
 
 # Or directly with Streamlit
 streamlit run app/app.py
-
-# Or using Make
-make serve
 ```
 
 Then open http://localhost:8501 in your browser.
 
-### Run Notebooks
-
-The analysis is documented in Jupyter notebooks:
-
-```bash
-jupyter notebook notebooks/
-```
-
-| Notebook | Description |
-|----------|-------------|
-| `01_data_exploration.ipynb` | Exploratory data analysis |
-| `02_feature_engineering.ipynb` | RFM feature creation |
-| `03_modeling.ipynb` | Clustering and evaluation |
-| `04_results_analysis.ipynb` | Segment analysis and maintenance |
-
-### Run Tests
-
-```bash
-pytest tests/ -v --cov=src --cov-report=html
-```
+---
 
 ## Project Structure
 
 ```
-olist-customer-segmentation/
+backmarket-segmentation/
 ├── .github/workflows/            # CI/CD pipelines
-│   ├── ci.yml                    # Continuous Integration
-│   ├── release.yml               # Release automation
-│   └── pr-preview.yml            # PR preview comments
 ├── app/                          # Streamlit dashboard
 │   ├── app.py                    # Main entry point
 │   └── pages/                    # Dashboard pages
 ├── data/
-│   ├── raw/                      # Original datasets
+│   ├── raw/                      # Original datasets (Olist for portfolio)
 │   └── processed/                # Processed RFM data
 ├── docs/                         # Documentation
 ├── models/                       # Saved models
 ├── notebooks/                    # Jupyter notebooks
-├── scripts/                      # Automation scripts
-│   ├── setup.sh                  # Environment setup
-│   ├── train.sh                  # Training pipeline
-│   └── download_data.sh          # Data download
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_feature_engineering.ipynb
+│   ├── 03_modeling.ipynb
+│   └── 04_results_analysis.ipynb
 ├── src/                          # Source code
 │   ├── cli.py                    # CLI commands
-│   ├── config.py                 # Configuration
 │   ├── data/                     # Data loading & preprocessing
 │   ├── features/                 # Feature engineering (RFM)
 │   ├── models/                   # Clustering & evaluation
 │   └── visualization/            # Plotting functions
 ├── tests/                        # Unit tests (152 tests)
 ├── Makefile                      # Build automation
-├── pyproject.toml                # Project configuration
-├── CHANGELOG.md                  # Version history
-└── README.md
+└── pyproject.toml                # Project configuration
 ```
+
+---
 
 ## Methodology
 
@@ -249,20 +239,7 @@ Using Adjusted Rand Index (ARI) simulation:
 - **Recommended update frequency**: Every 3-4 months
 - **Alert threshold**: ARI < 0.8
 
-## Dashboard
-
-The interactive Streamlit dashboard provides:
-
-- **Overview**: Key metrics and segment distribution
-- **Segments**: Detailed analysis of each customer segment
-- **Explorer**: Interactive 3D visualization
-- **About**: Project documentation
-
-### Screenshots
-
-| Overview | Segment Analysis |
-|----------|------------------|
-| ![Overview](docs/screenshot_overview.png) | ![Segments](docs/screenshot_segments.png) |
+---
 
 ## Tech Stack
 
@@ -270,64 +247,39 @@ The interactive Streamlit dashboard provides:
 - **Machine Learning**: scikit-learn
 - **Visualization**: matplotlib, seaborn, plotly
 - **Dashboard**: Streamlit
-- **Testing**: pytest
-- **Code Quality**: black, ruff
+- **Testing**: pytest (152 tests)
+- **Code Quality**: ruff
+
+---
 
 ## Data Source
 
-This portfolio version uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle. The original client data remains confidential.
+This portfolio version uses the [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle. The original Back Market data remains confidential.
 
-## Documentation
+---
 
-Full documentation is available via Sphinx:
-
-```bash
-# Install documentation dependencies
-pip install -e ".[docs]"
-
-# Build the documentation
-make docs
-
-# Or with auto-reload for development
-make docs-live
-```
-
-Then open `docs/_build/html/index.html` in your browser.
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Run tests (`make check`)
-4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-5. Push to the branch (`git push origin feature/AmazingFeature`)
-6. Open a Pull Request
-
-### Development Setup
+## Testing
 
 ```bash
-# Install dev dependencies
-make install-dev
-
-# Run all checks
-make check
-
-# Format code
-make format
+pytest tests/ -v --cov=src --cov-report=html
 ```
+
+---
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+---
+
 ## Author
 
 **Thomas Mebarki**
+Data Scientist & ML Engineer
 
 - GitHub: [@ThomasMeb](https://github.com/ThomasMeb)
+- LinkedIn: [Thomas Mebarki](https://linkedin.com/in/thomas-mebarki)
 
 ---
 
-*This project was originally developed for a professional client engagement. For portfolio purposes, it has been adapted using the Olist dataset from Kaggle, demonstrating expertise in unsupervised learning and customer segmentation techniques.*
+*Mission réalisée pour Back Market entre décembre 2023 et février 2024. Version portfolio adaptée sur le dataset Olist.*
