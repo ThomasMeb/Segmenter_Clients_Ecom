@@ -17,7 +17,6 @@ ROOT_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
 import pandas as pd
-import numpy as np
 
 from src.config import (
     RAW_DATA_DIR,
@@ -57,11 +56,6 @@ def prepare_transactions(df: pd.DataFrame) -> pd.DataFrame:
     """Prépare les transactions pour le calcul RFM."""
     # Vérifier les colonnes nécessaires
     required_cols = ["customer_unique_id", "order_id", "price", "order_purchase_timestamp"]
-
-    # Renommer si nécessaire
-    rename_map = {
-        "order_purchase_timestamp": "order_purchase_timestamp",
-    }
 
     if all(col in df.columns for col in required_cols):
         return df[required_cols].copy()
@@ -114,7 +108,7 @@ def main():
     rfm_df = calculator.fit_transform(transactions)
 
     print(f"  - {len(rfm_df)} clients avec features RFM")
-    print(f"  - Statistiques:")
+    print("  - Statistiques:")
     print(calculator.get_statistics().round(2).to_string().replace("\n", "\n    "))
 
     # 4. Segmentation
@@ -126,7 +120,7 @@ def main():
     rfm_df["segment"] = labels
 
     # Afficher la distribution
-    print(f"  - Distribution des segments:")
+    print("  - Distribution des segments:")
     for segment_id in sorted(rfm_df["segment"].unique()):
         count = (rfm_df["segment"] == segment_id).sum()
         pct = count / len(rfm_df) * 100

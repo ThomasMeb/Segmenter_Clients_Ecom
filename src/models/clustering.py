@@ -22,7 +22,6 @@ from src.config import (
     KMEANS_MODEL_FILE,
     SCALER_FILE,
     SEGMENT_NAMES,
-    RFM_FEATURES,
 )
 
 

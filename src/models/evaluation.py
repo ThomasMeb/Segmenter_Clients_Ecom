@@ -5,7 +5,7 @@ Ce module fournit des métriques pour évaluer la qualité
 des segmentations.
 """
 
-from typing import Dict, Any
+from typing import Dict
 
 import numpy as np
 import pandas as pd

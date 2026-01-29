@@ -9,7 +9,6 @@ from datetime import datetime
 from typing import Optional, Union
 
 import pandas as pd
-import numpy as np
 
 from src.config import (
     CUSTOMER_ID_COL,
