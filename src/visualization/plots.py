@@ -322,7 +322,7 @@ def plot_radar_chart(
                 fill="toself",
                 name=segment_name,
                 line_color=SEGMENT_COLORS.get(
-                    i, f"rgb({i*60}, {100+i*30}, {200-i*40})"
+                    i, f"rgb({i * 60}, {100 + i * 30}, {200 - i * 40})"
                 ),
             )
         )

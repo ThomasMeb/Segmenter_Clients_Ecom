@@ -88,11 +88,13 @@ class RFMCalculator:
             self.reference_date = df[DATE_COL].max()
 
         # Calcul RFM
-        rfm = df.groupby(CUSTOMER_ID_COL).agg({
-            DATE_COL: "max",           # Date du dernier achat
-            ORDER_ID_COL: "nunique",   # Nombre de commandes uniques
-            AMOUNT_COL: "sum",         # Montant total
-        })
+        rfm = df.groupby(CUSTOMER_ID_COL).agg(
+            {
+                DATE_COL: "max",  # Date du dernier achat
+                ORDER_ID_COL: "nunique",  # Nombre de commandes uniques
+                AMOUNT_COL: "sum",  # Montant total
+            }
+        )
 
         # Renommage des colonnes
         rfm.columns = ["last_purchase", "frequency", "monetary"]
@@ -183,11 +185,13 @@ def calculate_rfm(
     >>> rfm.head()
     """
     # Renommage temporaire des colonnes si nécessaire
-    df = df.rename(columns={
-        customer_col: CUSTOMER_ID_COL,
-        date_col: DATE_COL,
-        amount_col: AMOUNT_COL,
-    })
+    df = df.rename(
+        columns={
+            customer_col: CUSTOMER_ID_COL,
+            date_col: DATE_COL,
+            amount_col: AMOUNT_COL,
+        }
+    )
 
     calculator = RFMCalculator(reference_date=reference_date)
     return calculator.fit_transform(df)

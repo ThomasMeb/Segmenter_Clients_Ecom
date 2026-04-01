@@ -90,7 +90,9 @@ class TestPlotSilhouette:
         assert isinstance(fig, plt.Figure)
         plt.close(fig)
 
-    def test_plot_silhouette_save(self, sample_scaled_data, sample_labels, test_data_dir):
+    def test_plot_silhouette_save(
+        self, sample_scaled_data, sample_labels, test_data_dir
+    ):
         """Test de sauvegarde."""
         save_path = test_data_dir / "silhouette.png"
         fig = plot_silhouette(

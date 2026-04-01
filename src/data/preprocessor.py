@@ -62,7 +62,9 @@ def clean_transactions(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df[AMOUNT_COL] > 0]
 
     # Conversion de la date si nécessaire
-    if DATE_COL in df.columns and df[DATE_COL].dtype == "object":
+    if DATE_COL in df.columns and not pd.api.types.is_datetime64_any_dtype(
+        df[DATE_COL]
+    ):
         df[DATE_COL] = pd.to_datetime(df[DATE_COL])
 
     return df.reset_index(drop=True)
@@ -101,7 +103,7 @@ def prepare_for_rfm(
     df = df[required_cols]
 
     # Conversion de la date si nécessaire
-    if df[DATE_COL].dtype == "object":
+    if not pd.api.types.is_datetime64_any_dtype(df[DATE_COL]):
         df[DATE_COL] = pd.to_datetime(df[DATE_COL])
 
     # Tri par date

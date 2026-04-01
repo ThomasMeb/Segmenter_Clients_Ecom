@@ -389,7 +389,7 @@ def show_comparison_view(data):
             ],
             seg1_name: [
                 f"{len(seg1_data):,}",
-                f"{len(seg1_data)/len(data)*100:.1f}%",
+                f"{len(seg1_data) / len(data) * 100:.1f}%",
                 f"{seg1_data['recency'].mean():.0f} jours",
                 f"{seg1_data['frequency'].mean():.1f}",
                 f"{seg1_data['monetary'].mean():.2f} BRL",
@@ -397,7 +397,7 @@ def show_comparison_view(data):
             ],
             seg2_name: [
                 f"{len(seg2_data):,}",
-                f"{len(seg2_data)/len(data)*100:.1f}%",
+                f"{len(seg2_data) / len(data) * 100:.1f}%",
                 f"{seg2_data['recency'].mean():.0f} jours",
                 f"{seg2_data['frequency'].mean():.1f}",
                 f"{seg2_data['monetary'].mean():.2f} BRL",

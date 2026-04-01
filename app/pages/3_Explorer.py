@@ -101,7 +101,7 @@ def main():
         st.metric(
             "Clients filtrés",
             f"{len(filtered_data):,}",
-            f"{len(filtered_data)/len(data)*100:.1f}% du total",
+            f"{len(filtered_data) / len(data) * 100:.1f}% du total",
             help="Nombre de clients correspondant aux critères",
         )
 

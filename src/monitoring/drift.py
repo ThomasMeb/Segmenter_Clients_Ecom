@@ -495,7 +495,7 @@ def estimate_retraining_frequency(
         first_retrain_period = needs_retraining.iloc[0]["period"]
         recommendation = (
             f"Réentraînement recommandé tous les {int(first_retrain_period)} mois "
-            f"(basé sur un drift de {drift_rate*100:.1f}% par mois et ARI < {ari_threshold})"
+            f"(basé sur un drift de {drift_rate * 100:.1f}% par mois et ARI < {ari_threshold})"
         )
     else:
         first_retrain_period = max_periods

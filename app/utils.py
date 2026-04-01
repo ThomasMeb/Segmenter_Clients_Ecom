@@ -257,9 +257,9 @@ def show_dataframe_with_pagination(
 def format_number(value: float, decimals: int = 2) -> str:
     """Formate un nombre avec séparateurs de milliers."""
     if abs(value) >= 1_000_000:
-        return f"{value/1_000_000:.{decimals}f}M"
+        return f"{value / 1_000_000:.{decimals}f}M"
     elif abs(value) >= 1_000:
-        return f"{value/1_000:.{decimals}f}K"
+        return f"{value / 1_000:.{decimals}f}K"
     else:
         return f"{value:.{decimals}f}"
 

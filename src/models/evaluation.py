@@ -128,10 +128,12 @@ def get_silhouette_per_sample(
     """
     sample_scores = silhouette_samples(X, labels)
 
-    return pd.DataFrame({
-        "cluster": labels,
-        "silhouette": sample_scores,
-    })
+    return pd.DataFrame(
+        {
+            "cluster": labels,
+            "silhouette": sample_scores,
+        }
+    )
 
 
 def compare_models(

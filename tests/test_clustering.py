@@ -5,10 +5,8 @@ Tests pour le module src.models.clustering.
 import pytest
 import pandas as pd
 import numpy as np
-from pathlib import Path
 
 from src.models.clustering import CustomerSegmenter, find_optimal_clusters
-from src.config import SEGMENT_NAMES
 
 
 class TestCustomerSegmenter:
@@ -183,7 +181,11 @@ class TestFindOptimalClusters:
 
     def test_find_optimal_clusters_reproducibility(self, sample_rfm):
         """Test de la reproductibilité."""
-        results1 = find_optimal_clusters(sample_rfm, k_range=range(2, 5), random_state=42)
-        results2 = find_optimal_clusters(sample_rfm, k_range=range(2, 5), random_state=42)
+        results1 = find_optimal_clusters(
+            sample_rfm, k_range=range(2, 5), random_state=42
+        )
+        results2 = find_optimal_clusters(
+            sample_rfm, k_range=range(2, 5), random_state=42
+        )
 
         pd.testing.assert_frame_equal(results1, results2)

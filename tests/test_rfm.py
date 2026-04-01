@@ -65,11 +65,14 @@ class TestRFMCalculator:
     def test_fit_transform_auto_reference_date(self, sample_transactions):
         """Test que la date de référence est auto-calculée si non fournie."""
         calculator = RFMCalculator()
-        rfm = calculator.fit_transform(sample_transactions)
+        calculator.fit_transform(sample_transactions)
 
         # La date de référence doit être définie après fit_transform
         assert calculator.reference_date is not None
-        assert calculator.reference_date == sample_transactions["order_purchase_timestamp"].max()
+        assert (
+            calculator.reference_date
+            == sample_transactions["order_purchase_timestamp"].max()
+        )
 
     def test_get_statistics(self, sample_transactions):
         """Test de la méthode get_statistics."""
@@ -144,18 +147,20 @@ class TestCalculateRfm:
     def test_calculate_rfm_custom_columns(self, sample_transactions):
         """Test avec des noms de colonnes personnalisés."""
         # Renommer les colonnes
-        df = sample_transactions.rename(columns={
-            "customer_unique_id": "client_id",
-            "order_purchase_timestamp": "date",
-            "price": "amount"
-        })
+        df = sample_transactions.rename(
+            columns={
+                "customer_unique_id": "client_id",
+                "order_purchase_timestamp": "date",
+                "price": "amount",
+            }
+        )
 
         rfm = calculate_rfm(
             df,
             customer_col="client_id",
             date_col="date",
             amount_col="amount",
-            reference_date=datetime(2018, 4, 15)
+            reference_date=datetime(2018, 4, 15),
         )
 
         assert isinstance(rfm, pd.DataFrame)

@@ -2,7 +2,6 @@
 Tests pour le module src.data.loader.
 """
 
-
 import pandas as pd
 import pytest
 

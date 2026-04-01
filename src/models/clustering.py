@@ -196,17 +196,26 @@ class CustomerSegmenter:
         df["segment"] = self.predict(X)
         df["segment_name"] = df["segment"].map(SEGMENT_NAMES)
 
-        summary = df.groupby("segment_name").agg({
-            "recency": ["mean", "std"],
-            "frequency": ["mean", "std"],
-            "monetary": ["mean", "std"],
-            "segment": "count",
-        }).round(2)
+        summary = (
+            df.groupby("segment_name")
+            .agg(
+                {
+                    "recency": ["mean", "std"],
+                    "frequency": ["mean", "std"],
+                    "monetary": ["mean", "std"],
+                    "segment": "count",
+                }
+            )
+            .round(2)
+        )
 
         summary.columns = [
-            "recency_mean", "recency_std",
-            "frequency_mean", "frequency_std",
-            "monetary_mean", "monetary_std",
+            "recency_mean",
+            "recency_std",
+            "frequency_mean",
+            "frequency_std",
+            "monetary_mean",
+            "monetary_std",
             "count",
         ]
 
@@ -315,10 +324,12 @@ def find_optimal_clusters(
         )
         labels = kmeans.fit_predict(X_scaled)
 
-        results.append({
-            "k": k,
-            "inertia": kmeans.inertia_,
-            "silhouette": silhouette_score(X_scaled, labels),
-        })
+        results.append(
+            {
+                "k": k,
+                "inertia": kmeans.inertia_,
+                "silhouette": silhouette_score(X_scaled, labels),
+            }
+        )
 
     return pd.DataFrame(results)
