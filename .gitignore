@@ -120,3 +120,6 @@ data/processed/*.csv
 !data/.gitkeep
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+
+# Models (stored in portfolio repo)
+models/
