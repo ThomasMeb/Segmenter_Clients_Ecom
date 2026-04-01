@@ -47,6 +47,7 @@ jobs:
         run: |
           python -c "
           import json
+          import os
           import numpy as np
           import pandas as pd
           from pathlib import Path
@@ -98,12 +99,10 @@ jobs:
           print(f'Recommendation: {report.recommendation}')
 
           # Set outputs for GitHub Actions
-          with open('$GITHUB_OUTPUT', 'a') as f:
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'drift_detected={drift}\n')
               f.write(f'ari_score={report.ari_score:.4f}\n')
           "
-        env:
-          GITHUB_OUTPUT: ${{ github.output }}
 
       - name: Create drift report artifact
         if: always()
